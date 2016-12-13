@@ -90,6 +90,10 @@ namespace ExamProject.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
         
     }
 

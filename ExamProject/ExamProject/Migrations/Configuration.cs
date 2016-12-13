@@ -1,11 +1,14 @@
 namespace ExamProject.Migrations
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<ExamProject.Models.ApplicationDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<ExamProject.Models.ApplicationDbContext>
     {
         public Configuration()
         {
@@ -16,18 +19,73 @@ namespace ExamProject.Migrations
 
         protected override void Seed(ExamProject.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            if(!context.Roles.Any())
+            {
+                this.CreateRole(context, "Admin");
+                this.CreateRole(context, "User");
+            }
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            if(!context.Users.Any())
+            {
+                this.CreateNewUser(context, "admin@gmail.com", "Dragomir Proychev", "asdasd","0000000000","Male");
+                this.SetRoleToUser(context, "admin@gmail.com", "Admin");
+                this.SetRoleToUser(context, "admin@gmail.com", "User");
+            }
+        }
+
+        private void SetRoleToUser(ApplicationDbContext context, string username, string role)
+        {
+            var userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(context));
+
+            var user = context.Users.Where(u => u.UserName == username).First();
+
+            var result = userManager.AddToRole(user.Id, role);
+
+            if(!result.Succeeded)
+            {
+                throw new Exception(string.Join(";", result.Errors));
+            }
+        }
+
+        private void CreateNewUser(ApplicationDbContext context, string email, string fullName, string password, string phoneNumber, string gender)
+        {
+            var userManager = new UserManager<ApplicationUser>(
+                new UserStore<ApplicationUser>(context));
+
+            userManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 6,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireNonLetterOrDigit = false,
+                RequireUppercase = false
+            };
+
+            var admin = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                FullName = fullName,
+                PhoneNumber = phoneNumber,
+                Gender=gender
+            };
+
+            var result = userManager.Create(admin, password);
+
+        }
+
+        private void CreateRole(ApplicationDbContext database, string role )
+        {
+            var roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(database));
+
+            var result = roleManager.Create(new IdentityRole(role));
+
+            if(!result.Succeeded)
+            {
+                throw new Exception(string.Join(";", result.Errors));
+            }
         }
     }
 }

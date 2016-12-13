@@ -16,6 +16,9 @@ namespace ExamProject.Models
         [Required]
         public string FullName { get; set; }
 
+        [Required]
+        public string Gender { get; set; }
+
        
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
