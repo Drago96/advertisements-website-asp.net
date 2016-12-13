@@ -1,5 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using ExamProject.Migrations;
+using ExamProject.Models;
+using Microsoft.Owin;
 using Owin;
+using System.Data.Entity;
 
 [assembly: OwinStartupAttribute(typeof(ExamProject.Startup))]
 namespace ExamProject
@@ -8,6 +11,8 @@ namespace ExamProject
     {
         public void Configuration(IAppBuilder app)
         {
+            Database.SetInitializer(
+                new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
             ConfigureAuth(app);
         }
     }
