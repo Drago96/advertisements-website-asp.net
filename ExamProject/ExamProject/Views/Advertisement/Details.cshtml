@@ -1,0 +1,62 @@
+﻿@model ExamProject.Models.Advertisement
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <article>
+        <header>
+            <h2>
+                @Model.Title
+            </h2>
+        </header>
+        
+        <div>
+            <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px; float:left" />
+            <div>
+                Описание на продукта: @Model.Description
+            </div>
+            <div>
+                Дата на създаване на обявата: @Model.CreationDate
+            </div>
+            <div>
+                Цена: @Model.Price
+            </div>
+            <div>
+                Продавач: @Model.Seller.FullName
+            </div>
+      
+                @if (Model.IsSold == false)
+                {
+                    <div>
+                        Състояние на обявата: отворена
+                    </div>
+                }
+                @if (Model.IsSold == true)
+                {
+                    <div>
+                        Състояние на обявата: затворена
+                    </div>
+                }
+                    
+             </div>
+            <div>
+                Телефон за връзка: @Model.Seller.PhoneNumber
+            </div>
+            <div>
+                E-mail за връзка: @Model.Seller.Email
+            </div>
+        
+        
+           
+        
+        <footer class="pull-right">
+           
+                @Html.ActionLink("Edit", "Edit", "Article", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+                @Html.ActionLink("Delete", "Delete", "Article", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            
+            @Html.ActionLink("Back", "Index", "Article", null, new { @class = "btn btn-default btn-xs" })
+        </footer>
+    </article>
+</div>
