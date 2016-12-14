@@ -10,7 +10,7 @@ namespace ExamProject.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("List","Advertisement");
         }
     }
 }

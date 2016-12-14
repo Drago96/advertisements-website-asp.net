@@ -14,6 +14,10 @@ namespace ExamProject.Models
         {
         }
 
+        public virtual IDbSet<Advertisement> Advertisements { get; set; }
+
+        public virtual IDbSet<Image> Images { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

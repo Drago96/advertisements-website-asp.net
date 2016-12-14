@@ -95,6 +95,9 @@ namespace ExamProject.Models
         public string Gender { get; set; }
 
         
+        
+
+        
     }
 
     public class ResetPasswordViewModel
