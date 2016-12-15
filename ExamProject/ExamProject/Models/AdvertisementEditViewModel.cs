@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExamProject.Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace ExamProject.Models
         [Required]
         [Display(Name = "Image Edit")]
         [DataType(DataType.Upload)]
+        [Image]
         public HttpPostedFileBase ImageUpload { get; set; }
     }
 }

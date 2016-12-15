@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="well">
-        <h2>Delete Advertisement</h2>
+        <h2 class="paddedheader">Delete Advertisement</h2>
         @using (Html.BeginForm("Delete", "Advertisement", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()

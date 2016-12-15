@@ -1,45 +1,52 @@
-﻿@model ExamProject.Models.RegisterViewModel
+﻿@model ExamProject.Models.AccountEditModel
+
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Edit";
 }
+
 <div class="container">
     <div class="well">
-        <h2 class="paddedheader">@ViewBag.Title</h2>
+        <h2 class="paddedheader">Edit User</h2>
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
 
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
         {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary("", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-sm-4 control-label" })
+                @Html.LabelFor(m => m.Email, new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 </div>
             </div>
+
             <div class="form-group">
-                @Html.LabelFor(m => m.FullName, new { @class = "col-sm-4 control-label" })
+                @Html.LabelFor(m => m.FullName, new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
                     @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
                 </div>
             </div>
+
             <div class="form-group">
-                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-sm-4 control-label" })
+                @Html.LabelFor(m => m.PhoneNumber, new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
                     @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
                 </div>
             </div>
+
             <div class="form-group">
-                @Html.LabelFor(m => m.Password, new { @class = "col-sm-4 control-label" })
+                @Html.LabelFor(m => m.Password, new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
                 </div>
             </div>
+
             <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-sm-4 control-label" })
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label col-sm-4" })
                 <div class="col-sm-4">
-                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control" })
                 </div>
             </div>
+
             <div class="form-group">
                 @Html.LabelFor(m => m.Gender, new { @class = "col-sm-4 control-label" })
                 <div class="col-sm-4">
@@ -47,6 +54,7 @@
                     @Html.RadioButtonFor(m => m.Gender, "Female")  Female
                 </div>
             </div>
+
             <div class="form-group">
                 @Html.LabelFor(m => m.Birthday, new { @class = "col-sm-4 control-label" })
                 <div class="col-sm-4">
@@ -55,18 +63,28 @@
                         Birthday must be in format "MM/DD/YYYY"
                     </div>
                 </div>
-                
+
             </div>
+
+            if (this.User.IsInRole("Admin"))
+            {
             <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-4">
-                    @Html.ActionLink("Cancel", "Index", "Advertisement", null, new { @class = "btn btn-default" })
-                    <input type="submit" class="btn btn-success" value="Register" />
+                @for (int i = 0; i < Model.Roles.Count; i++)
+                {
+                    <div class="col-sm-offset-4 col-sm-4">
+                        @Html.HiddenFor(m => m.Roles[i].Name)
+                        @Html.CheckBoxFor(m => m.Roles[i].IsSelected)
+                        @Model.Roles[i].Name
+                    </div>
+                }
+            </div>
+            }
+
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <input type="submit" value="Edit" class="btn btn-success" />
                 </div>
             </div>
         }
     </div>
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

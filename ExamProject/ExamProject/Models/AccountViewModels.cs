@@ -98,6 +98,7 @@ namespace ExamProject.Models
 
         [Required]
         [Birthday]
+        [Display(Name ="Birth date")]
         public string Birthday { get; set; }
 
 

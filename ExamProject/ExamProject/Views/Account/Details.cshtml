@@ -1,0 +1,27 @@
+﻿@model ExamProject.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <h2 class="details">Информация за потребител: @Model.UserName</h2>
+    <div class="col-sm-4">
+        <div>Пълно име: @Model.FullName</div>
+        <div>Email: @Model.Email </div>
+        <div>Дата на раждане: @Model.Birthday</div>
+        <div>Пол: @Model.Gender</div>
+        <div>Телефонен номер: @Model.PhoneNumber</div>
+        <div>Брой обяви: @((ViewBag.advertisements as ICollection<ExamProject.Models.Advertisement>).Count)</div>
+        @if (this.User.IsInRole("Admin") || this.User.Identity.Name == Model.Email)
+        {
+            @Html.ActionLink("Edit", "Edit", "Account", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+            if (this.User.IsInRole("Admin") && this.User.Identity.Name != Model.Email)
+            {
+            @Html.ActionLink("Delete", "Delete", "Account", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            }
+        }
+        @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
+    </div>
+    
+</div>

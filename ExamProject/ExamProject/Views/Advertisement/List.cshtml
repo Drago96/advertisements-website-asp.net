@@ -6,55 +6,63 @@
 
 <div class="container">
     <div class="row">
-        <h3>Активни обяви:</h3>
+        <h1>Активни обяви:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == false)
             {
             <div>
-                <article>
+                <article class="container">
                     <header>
+                        <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image" />
                         <h2>
                             @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
                         </h2>
                     </header>
                     <p>
-                        @advertisement.GetSummary()
+                       Description: @advertisement.GetSummary()
                     </p>
-                    
+                    <p>
+                        @Html.ActionLink("Read More", "Details", "Advertisement",new { @id = advertisement.Id}, new { @class = "btn-xs btn-default" })
+                    </p>
+                    <footer >
                         <small class="author">
                             Seller: @advertisement.Seller.FullName
                         </small>
-                   
+                    </footer>
                 </article>
             </div>
             <hr />
             }
 
         }
-        <h3>Завършени продажби:</h3>
+        <h1>Завършени продажби:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == true)
             {
-            <div>
-            <article>
-                <header>
-                    <h2>
-                        @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
-                    </h2>
-                </header>
-                <p>
-                    @advertisement.GetSummary()
-                </p>
-                
-                    <small class="author">
-                        Seller: @advertisement.Seller.FullName
-                    </small>
-                
-            </article>
-            </div>
-            <hr />
+                <div>
+                    <article class="container">
+                        <header>
+                            <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image"  />
+                            <h2>
+                                @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
+                            </h2>
+                        </header>
+                        <p>
+                            Description: @advertisement.GetSummary()
+                        </p>
+                        <p>
+                            @Html.ActionLink("Read More", "Details", "Advertisement", new { @id = advertisement.Id }, new { @class = "btn-xs btn-default" })
+                        </p>
+                        <footer>
+                            <small class="author">
+                                Seller: @advertisement.Seller.FullName
+                            </small>
+                        </footer>
+                    </article>
+                </div>
+                <hr />
             }
         }
     </div>

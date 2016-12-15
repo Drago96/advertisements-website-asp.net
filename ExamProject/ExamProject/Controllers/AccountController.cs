@@ -9,6 +9,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ExamProject.Models;
+using System.Net;
+using System.Collections.Generic;
+using System.IO;
+using System.Web.Security;
 
 namespace ExamProject.Controllers
 {
@@ -154,10 +158,11 @@ namespace ExamProject.Controllers
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, PhoneNumber = model.PhoneNumber , Gender=model.Gender, Birthday=model.Birthday};
                 var result = await UserManager.CreateAsync(user, model.Password);
 
-                var addToResult = UserManager.AddToRole(user.Id, "User");
+                
 
                 if (result.Succeeded)
                 {
+                    var addToResult = UserManager.AddToRole(user.Id, "User");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -484,5 +489,245 @@ namespace ExamProject.Controllers
             }
         }
         #endregion
+
+        //GET: Account/Details
+        public ActionResult Details(string name)
+        {
+            if(name == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var user = database.Users.Where(u => u.Email == name).First();
+
+                var advertisements = database.Advertisements.Where(a => a.SellerId == user.Id).ToList();
+
+                ViewBag.advertisements = advertisements;
+
+                if(user==null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(user);
+            }
+        }
+
+        //GET: Account/Edit
+        public ActionResult Edit(string id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var user = database.Users.FirstOrDefault(u => u.Id == id);
+
+                if (user==null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(user.Email))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                var viewModel = new AccountEditModel();
+                if (this.User.IsInRole("Admin"))
+                {
+                    viewModel.Roles = GetUserRoles(user, database);
+                }
+                viewModel.FullName = user.FullName;
+                viewModel.Email = user.Email;
+                viewModel.PhoneNumber = user.PhoneNumber;
+                viewModel.Gender = user.Gender;
+                viewModel.Birthday = user.Birthday;
+
+                return View(viewModel);
+            }
+        }
+
+        //POST: Account/Edit
+        [HttpPost]
+        public ActionResult Edit(string id,AccountEditModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                using (var database = new ApplicationDbContext())
+                {
+                    var user = database.Users.FirstOrDefault(u => u.Id == id);
+
+                    if(user == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    if (!IsAuthorizedToEdit(user.Email))
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                    }
+
+                    if (!string.IsNullOrEmpty(model.Password))
+                    {
+                        var hasher = new PasswordHasher();
+                        var passwordHash = hasher.HashPassword(model.Password);
+                        user.PasswordHash = passwordHash;
+                    }
+
+                    user.Email = model.Email;
+                    user.Birthday = model.Birthday;
+                    user.FullName = model.FullName;
+                    user.Gender = model.Gender;
+                    user.PhoneNumber = model.PhoneNumber;
+                    if(this.User.IsInRole("Admin"))
+                    {
+                        this.SetUserRoles(model, user, database);
+                    }
+
+                    database.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    database.SaveChanges();
+
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            return View(model);
+        }
+
+        //GET: Account/Delete
+        public ActionResult Delete(string id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var user = database.Users.Where(u => u.Id.Equals(id)).First();
+
+                if(user==null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(user.Email) || this.User.Identity.Name == user.Email)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                return View(user);
+
+
+            }
+        }
+
+        //POST: Account/Delete
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ActionName("Delete")]
+        public ActionResult DeletePost(string id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var user = database.Users.Where(u => u.Id == id).First();
+
+                if(user == null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(user.Email) || this.User.Identity.Name == user.Email)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                var userAdds = database.Advertisements.Where(a => a.SellerId == user.Id);
+
+                foreach(var advertisement in userAdds)
+                {
+                    var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
+
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+
+                    var directory = new DirectoryInfo(Server.MapPath("~") + "uploads/" + advertisement.Id);
+                    if (directory.Exists)
+                    {
+                        directory.Delete(true);
+                    }
+                    database.Advertisements.Remove(advertisement);
+                }
+
+              
+                    database.Users.Remove(user);
+                    database.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                
+            }
+        }
+
+        [Authorize(Roles ="Admin")]
+        private void SetUserRoles(AccountEditModel model, ApplicationUser user, ApplicationDbContext database)
+        {
+            var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+            foreach(var role in model.Roles)
+            {
+                if(role.IsSelected)
+                {
+                    userManager.AddToRole(user.Id, role.Name);
+                }
+                else if(!role.IsSelected)
+                {
+                    userManager.RemoveFromRole(user.Id, role.Name);
+                }
+            }
+        }
+
+        [Authorize(Roles ="Admin")]
+        private IList<Role> GetUserRoles(ApplicationUser user, ApplicationDbContext database)
+        {
+            var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+            var roles = database.Roles.Select(r => r.Name).OrderBy(r => r).ToList();
+
+            var userRoles = new List<Role>();
+
+            foreach(var roleName in roles)
+            {
+                var role = new Role { Name = roleName };
+
+                if(userManager.IsInRole(user.Id,roleName))
+                {
+                    role.IsSelected = true;
+                }
+
+                userRoles.Add(role);
+            }
+
+            return userRoles;
+
+        }
+
+        private bool IsAuthorizedToEdit(string email)
+        {
+            bool isAdmin = this.User.IsInRole("Admin");
+            bool isUser = email == this.User.Identity.Name;
+
+            return isAdmin || isUser;
+        }
     }
 }

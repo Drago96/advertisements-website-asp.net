@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="well">
-    <h2>Create Advertisement</h2>
+    <h2 class="paddedheader">Create Advertisement</h2>
     @using (Html.BeginForm("Create", "Advertisement", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()

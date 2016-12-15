@@ -23,4 +23,29 @@ textarea {
     max-width: 280px;
 }
 
+h1{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
 
+div{    
+    word-wrap: break-word;
+}
+
+.paddedheader{
+    margin-bottom:50px;
+}
+
+.frontpage-image{
+    height:110px;
+    width:100px;
+}
+
+.add-image{
+    height:200px;width:150px
+}
+
+.details{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}

@@ -6,35 +6,56 @@
 
 <div class="container">
     <article>
-        <header>
-            <h2>
+        <header class="col-sm-offset-2">
+            <h1>
                 @Model.Title
-            </h2>
+            </h1>
         </header>
         
         <div>
             @if (Model.ImageUrl != null)
             {
-                <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px; float:left" />
+                <div class="col-sm-2">
+                    <img src="@Url.Content(Model.ImageUrl)" alt="Image" class="add-image" />
+                    <div>
+                        @if (!Model.IsSold && ((User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))))
+                        {
+                            @Html.ActionLink("МАРКИРАЙ ПРОДАДЕНА", "MarkAsSold", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+                        }
+                    </div>
+                </div>
             }
             @if (Model.ImageUrl == null)
             {
-                <img src="/uploads/default/no-image-icon-23.jpg" alt="Image" style="height:200px;width:150px; float:left" />
+                <div class="col-sm-2">
+                    <img src="/uploads/default/no-image-icon-23.jpg" alt="Image" class="add-image" />
+                    <div>
+                        @if (!Model.IsSold && ((User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))))
+                         {
+                            @Html.ActionLink("МАРКИРАЙ ПРОДАДЕНА", "MarkAsSold", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+                        }
+                    </div>
+                </div>
             }
+            <div class="col-sm-10">
+                <div class="breaking">
+                    Описание на продукта: @Model.Description
+                </div>
 
-            <div>
-                Описание на продукта: @Model.Description
-            </div>
-            <div>
-                Дата на създаване на обявата: @Model.CreationDate
-            </div>
-            <div>
-                Цена: @Model.Price лв.
-            </div>
-            <div>
-                Продавач: @Model.Seller.FullName
-            </div>
-      
+                <div>
+                    Цена: @Model.Price лв.
+                </div>
+
+                <div>
+                    Продавач: @Model.Seller.FullName
+                </div>
+
+                <div>
+                    Дата на създаване на обявата: @Model.CreationDate.ToString("MM/dd/yyyy")
+                </div>
+                
+                
+
                 @if (Model.IsSold == false)
                 {
                     <div>
@@ -47,28 +68,26 @@
                         Състояние на обявата: затворена
                     </div>
                 }
-                    
-             </div>
-            <div>
-                Телефон за връзка: @Model.Seller.PhoneNumber
-            </div>
-            <div>
-                E-mail за връзка: @Model.Seller.Email
-            </div>
-        
-        
-           @if(!Model.IsSold && ((User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))))
-           {
-               @Html.ActionLink("МАРКИРАЙ ПРОДАДЕНА", "MarkAsSold", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
-           }
 
-        <footer class="pull-right">
-           @if (User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))
-           {
-                @Html.ActionLink("Edit", "Edit", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
-                @Html.ActionLink("Delete", "Delete", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
-           }
-            @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
-        </footer>
+
+                <div>
+                    Телефон за връзка: @Model.Seller.PhoneNumber
+                </div>
+                <div>
+                    E-mail за връзка: @Model.Seller.Email
+                </div>
+                <footer class="pull-right">
+                    @if (User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))
+                    {
+                        @Html.ActionLink("Edit", "Edit", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Delete", "Delete", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+                    }
+                    @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
+                </footer>
+            </div>
+
+        </div>
+
+        
     </article>
 </div>
