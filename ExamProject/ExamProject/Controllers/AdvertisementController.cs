@@ -240,6 +240,33 @@ namespace ExamProject.Controllers
 
         }
 
+        //POST: Mark as sold
+        public ActionResult MarkAsSold(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                if (!IsAuthorizedToEdit(advertisement))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                advertisement.MarkSold();
+
+                database.Entry(advertisement).State = EntityState.Modified;
+                database.SaveChanges();
+
+                return RedirectToAction("List");
+
+            }
+        }
+
         private void SetImage(Advertisement advertisement, HttpPostedFileBase ImageUpload)
         {
             var validImageTypes = new string[]

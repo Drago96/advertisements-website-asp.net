@@ -44,9 +44,11 @@ namespace ExamProject.Models
         public virtual ApplicationUser Seller { get; set; }
 
         [Required]
+        [Display(Name ="Available")]
         public bool IsSold { get; set; }
        
         [DataType(DataType.ImageUrl)]
+        [Display(Name ="Image")]
         public string ImageUrl { get; set; }
 
         [Required]
@@ -69,6 +71,13 @@ namespace ExamProject.Models
             return this.Seller.UserName.Equals(name);
         }
 
+        public void MarkSold()
+        {
+            if(this.IsSold == false)
+            {
+                this.IsSold =true;
+            }
+        }
 
 
         

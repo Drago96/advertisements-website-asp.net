@@ -57,8 +57,11 @@
             </div>
         
         
-           
-        
+           @if(!Model.IsSold && ((User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))))
+           {
+               @Html.ActionLink("МАРКИРАЙ ПРОДАДЕНА", "MarkAsSold", "Advertisement", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+           }
+
         <footer class="pull-right">
            @if (User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))
            {
