@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using ExamProject.Validations;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,10 @@ namespace ExamProject.Models
 
         [Required]
         public string Gender { get; set; }
+
+        [Required]
+        [Birthday]
+        public string Birthday { get; set; }
 
        
 

@@ -27,7 +27,7 @@ namespace ExamProject.Migrations
 
             if(!context.Users.Any())
             {
-                this.CreateNewUser(context, "admin@gmail.com", "Dragomir Proychev", "asdasd","0000000000","Male");
+                this.CreateNewUser(context, "admin@gmail.com", "Dragomir Proychev", "asdasd","0000000000","Male","01/01/1990");
                 this.SetRoleToUser(context, "admin@gmail.com", "Admin");
                 this.SetRoleToUser(context, "admin@gmail.com", "User");
             }
@@ -48,7 +48,7 @@ namespace ExamProject.Migrations
             }
         }
 
-        private void CreateNewUser(ApplicationDbContext context, string email, string fullName, string password, string phoneNumber, string gender)
+        private void CreateNewUser(ApplicationDbContext context, string email, string fullName, string password, string phoneNumber, string gender, string birthday)
         {
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
@@ -68,7 +68,8 @@ namespace ExamProject.Migrations
                 Email = email,
                 FullName = fullName,
                 PhoneNumber = phoneNumber,
-                Gender=gender
+                Gender = gender,
+                Birthday = birthday
             };
 
             var result = userManager.Create(admin, password);

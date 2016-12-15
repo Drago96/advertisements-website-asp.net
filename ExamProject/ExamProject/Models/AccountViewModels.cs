@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ExamProject.Validations;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ExamProject.Models
@@ -77,6 +78,7 @@ namespace ExamProject.Models
         [Required]
         [StringLength(12)]
         [Display(Name = "Phone Number")]
+        [RegularExpression("0([0-9]{9})", ErrorMessage = "Invalid phone number.")]
         public string PhoneNumber { get; set; }
 
         [Required]
@@ -94,10 +96,14 @@ namespace ExamProject.Models
         [Display(Name = "Gender")]
         public string Gender { get; set; }
 
-        
-        
+        [Required]
+        [Birthday]
+        public string Birthday { get; set; }
 
-        
+
+
+
+
     }
 
     public class ResetPasswordViewModel

@@ -151,7 +151,7 @@ namespace ExamProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, PhoneNumber = model.PhoneNumber , Gender=model.Gender};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, PhoneNumber = model.PhoneNumber , Gender=model.Gender, Birthday=model.Birthday};
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 var addToResult = UserManager.AddToRole(user.Id, "User");
