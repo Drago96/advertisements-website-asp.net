@@ -1,7 +1,61 @@
-﻿
+﻿@model List<ExamProject.Models.Advertisement>
+
 @{
     ViewBag.Title = "List";
 }
 
-<h2>List</h2>
+<div class="container">
+    <div class="row">
+        <h3>Активни обяви:</h3>
+        @foreach (var advertisement in Model)
+        {
+            if (advertisement.IsSold == false)
+            {
+            <div>
+                <article>
+                    <header>
+                        <h2>
+                            @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
+                        </h2>
+                    </header>
+                    <p>
+                        @advertisement.GetSummary()
+                    </p>
+                    
+                        <small class="author">
+                            Seller: @advertisement.Seller.FullName
+                        </small>
+                   
+                </article>
+            </div>
+            <hr />
+            }
 
+        }
+        <h3>Завършени продажби:</h3>
+        @foreach (var advertisement in Model)
+        {
+            if (advertisement.IsSold == true)
+            {
+            <div>
+            <article>
+                <header>
+                    <h2>
+                        @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
+                    </h2>
+                </header>
+                <p>
+                    @advertisement.GetSummary()
+                </p>
+                
+                    <small class="author">
+                        Seller: @advertisement.Seller.FullName
+                    </small>
+                
+            </article>
+            </div>
+            <hr />
+            }
+        }
+    </div>
+</div>

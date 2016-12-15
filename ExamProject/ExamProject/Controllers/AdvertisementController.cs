@@ -44,6 +44,7 @@ namespace ExamProject.Controllers
         }
 
         //POST: Advertisement/Create
+        [Authorize]
         [HttpPost]
         public ActionResult Create(AdvertisementViewModel model)
         {
@@ -91,6 +92,141 @@ namespace ExamProject.Controllers
             }
         }
 
+        //GET: Advertisement/Delete
+        public ActionResult Delete(int? id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            using (var database = new ApplicationDbContext())
+            {
+                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                if(!IsAuthorizedToEdit(advertisement))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                if(advertisement == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(advertisement);
+            }
+        }
+
+        //POST: Advertisement/Delete
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult DeletePost(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                if(advertisement == null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(advertisement))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
+
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+                database.Advertisements.Remove(advertisement);
+                database.SaveChanges();
+
+                return RedirectToAction("List");
+            }
+        }
+
+        //GET: Advertisement/Edit
+        public ActionResult Edit (int? id)
+        {
+            if(id==null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new ApplicationDbContext())
+            {
+                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                if(advertisement == null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(advertisement))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                var model = new AdvertisementEditViewModel();
+                model.Description = advertisement.Description;
+                model.Price = advertisement.Price;
+                model.Title = advertisement.Title;
+                model.ImageUrl = advertisement.ImageUrl;
+                model.IsSold = advertisement.IsSold;
+
+                return View(model);
+            }
+        }
+
+        //POST: Advertisement/Edit
+        [HttpPost]
+        public ActionResult Edit(int? id, AdvertisementEditViewModel model)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            using (var database = new ApplicationDbContext())
+            {
+                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                if(advertisement == null)
+                {
+                    return HttpNotFound();
+                }
+
+                if (!IsAuthorizedToEdit(advertisement))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
+                advertisement.Title = model.Title;
+                advertisement.Description = model.Description;
+                advertisement.Price = model.Price;
+                advertisement.IsSold = model.IsSold;
+                if(model.ImageUpload!=null)
+                {
+                    this.SetImage(advertisement, model.ImageUpload);
+                }
+
+                database.Entry(advertisement).State = EntityState.Modified;
+                database.SaveChanges();
+
+                return RedirectToAction("List");
+            }
+
+
+        }
+
         private void SetImage(Advertisement advertisement, HttpPostedFileBase ImageUpload)
         {
             var validImageTypes = new string[]
@@ -101,10 +237,20 @@ namespace ExamProject.Controllers
                  "image/png"
              };
 
+            if(advertisement.ImageUrl!=null)
+            {
+                var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
+
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
+
             if (ImageUpload != null && ImageUpload.ContentLength != 0 && validImageTypes.Contains(ImageUpload.ContentType))
             {
-                DirectoryInfo dir = Directory.CreateDirectory("/Downloads/c#/ExamProject/Exam-Project/ExamProject/ExamProject/uploads/"+ advertisement.SellerId);
-                var uploadDir = "/Downloads/c#/ExamProject/Exam-Project/ExamProject/ExamProject/uploads/"+ advertisement.SellerId;
+                DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/")+ advertisement.SellerId);
+                var uploadDir = Server.MapPath("~/uploads/") + advertisement.SellerId;
                 var imagePath = Path.Combine(uploadDir, ImageUpload.FileName);
                 ImageUpload.SaveAs(imagePath);
                 advertisement.ImageUrl = "/uploads/"+advertisement.SellerId+"/"+ImageUpload.FileName;
@@ -112,6 +258,14 @@ namespace ExamProject.Controllers
                 
                 
             }
+        }
+
+        private bool IsAuthorizedToEdit(Advertisement advertisement)
+        {
+            bool isAdmin = this.User.IsInRole("Admin");
+            bool isSeller = advertisement.IsSeller(this.User.Identity.Name);
+
+            return isAdmin || isSeller;
         }
     }
 }

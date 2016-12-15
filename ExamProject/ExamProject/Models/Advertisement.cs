@@ -53,6 +53,23 @@ namespace ExamProject.Models
         [Required]
         public double Price { get; set; }
 
+        public string GetSummary()
+        {
+            if(this.Description.Length<100)
+            {
+                return this.Description;
+            }
+            else
+            {
+                return this.Description.Substring(0,100) + "...";
+            }
+        }
+
+        public bool IsSeller(string name)
+        {
+            return this.Seller.UserName.Equals(name);
+        }
+
 
 
         
