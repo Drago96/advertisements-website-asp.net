@@ -45,8 +45,7 @@ namespace ExamProject.Models
 
         [Required]
         public bool IsSold { get; set; }
-
-        [Required]
+       
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
 

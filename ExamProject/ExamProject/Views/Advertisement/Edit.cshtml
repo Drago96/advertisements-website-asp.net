@@ -46,7 +46,16 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.ImageUrl, new { @class = "col-sm-4 control-label" })
                 <div class="col-sm-4">
-                    <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px;" />
+                    @if (Model.ImageUrl != null)
+                    {
+                     <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px;" />
+                    }
+                    @if(Model.ImageUrl == null)
+                    {
+                        <div class="col-sm-12" style="color:red">
+                            No image uploaded!
+                        </div>
+                    }
                 </div>
             </div>
 

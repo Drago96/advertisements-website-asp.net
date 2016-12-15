@@ -59,9 +59,15 @@ namespace ExamProject.Controllers
 
                     var advertisement = new Advertisement(sellerId, model.Title, model.Description, model.Price);
 
-                    this.SetImage(advertisement, model.ImageUpload);
+                    
+                   
 
                     database.Advertisements.Add(advertisement);
+                    database.SaveChanges();
+
+                    this.SetImage(advertisement, model.ImageUpload);
+
+                    database.Entry(advertisement).State = EntityState.Modified;
                     database.SaveChanges();
 
                     return RedirectToAction("Index");
@@ -147,6 +153,13 @@ namespace ExamProject.Controllers
                 {
                     System.IO.File.Delete(fullPath);
                 }
+
+                var directory = new DirectoryInfo(Server.MapPath("~") + "uploads/" + advertisement.Id);
+                if(directory.Exists)
+                {
+                    directory.Delete(true);
+                }
+
                 database.Advertisements.Remove(advertisement);
                 database.SaveChanges();
 
@@ -249,15 +262,16 @@ namespace ExamProject.Controllers
 
             if (ImageUpload != null && ImageUpload.ContentLength != 0 && validImageTypes.Contains(ImageUpload.ContentType))
             {
-                DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/")+ advertisement.SellerId);
-                var uploadDir = Server.MapPath("~/uploads/") + advertisement.SellerId;
+                DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/")+ advertisement.Id);
+                var uploadDir = Server.MapPath("~/uploads/") + advertisement.Id;
                 var imagePath = Path.Combine(uploadDir, ImageUpload.FileName);
                 ImageUpload.SaveAs(imagePath);
-                advertisement.ImageUrl = "/uploads/"+advertisement.SellerId+"/"+ImageUpload.FileName;
+                advertisement.ImageUrl = "/uploads/"+advertisement.Id + "/"+ImageUpload.FileName;
                 
                 
                 
             }
+            
         }
 
         private bool IsAuthorizedToEdit(Advertisement advertisement)

@@ -13,7 +13,15 @@
         </header>
         
         <div>
-            <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px; float:left" />
+            @if (Model.ImageUrl != null)
+            {
+                <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="height:200px;width:150px; float:left" />
+            }
+            @if (Model.ImageUrl == null)
+            {
+                <img src="/uploads/default/no-image-icon-23.jpg" alt="Image" style="height:200px;width:150px; float:left" />
+            }
+
             <div>
                 Описание на продукта: @Model.Description
             </div>
@@ -21,7 +29,7 @@
                 Дата на създаване на обявата: @Model.CreationDate
             </div>
             <div>
-                Цена: @Model.Price
+                Цена: @Model.Price лв.
             </div>
             <div>
                 Продавач: @Model.Seller.FullName
