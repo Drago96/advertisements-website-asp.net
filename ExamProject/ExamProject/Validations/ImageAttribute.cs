@@ -26,9 +26,16 @@ namespace ExamProject.Validations
                  "image/png"
              };
 
-            if(!validImageTypes.Contains(input.ContentType))
+            if (input != null)
             {
-                return new ValidationResult("File is not a valid image type");
+                if (!validImageTypes.Contains(input.ContentType))
+                {
+                    return new ValidationResult("File is not a valid image type");
+                }
+                else
+                {
+                    return ValidationResult.Success;
+                }
             }
             else
             {

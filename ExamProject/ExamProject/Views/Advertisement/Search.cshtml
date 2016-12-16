@@ -1,0 +1,94 @@
+﻿@model List<ExamProject.Models.Advertisement>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+
+@using (Html.BeginForm("Search", "Advertisement", new { @class = "search-bar" }, FormMethod.Get))
+{
+    <div class="search-bar">
+        @Html.TextBox("searchString", null, new { @class = "form-control col-sm-4" })
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+}
+<div class="container">
+    <div class="row">
+        <h2>Резултати от търсенето за: @ViewBag.searchString</h2>
+        <h1>Активни обяви:</h1>
+        @foreach (var advertisement in Model)
+        {
+            if (advertisement.IsSold == false)
+            {
+                <div>
+                    <article class="container">
+                        <header>
+                            <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image" />
+                            <h2>
+                                @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
+                            </h2>
+                        </header>
+                        <p>
+                            Description: @advertisement.GetSummary()
+                        </p>
+                        <p>
+                            @Html.ActionLink("Read More", "Details", "Advertisement", new { @id = advertisement.Id }, new { @class = "btn-xs btn-default" })
+                        </p>
+                        <footer>
+                            <small class="author">
+                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null)
+                                
+                            </small>
+                        </footer>
+                    </article>
+                </div>
+                <hr />
+            }
+
+        }
+        @if(Model.Where(a => a.IsSold == false).ToList().Count == 0)
+        {
+            <div class="text-muted">
+                Няма намерени резултати.
+            </div>
+            <hr />
+        }
+        <h1>Завършени продажби:</h1>
+        @foreach (var advertisement in Model)
+        {
+            if (advertisement.IsSold == true)
+            {
+                <div>
+                    <article class="container">
+                        <header>
+                            <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image" />
+                            <h2>
+                                @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
+                            </h2>
+                        </header>
+                        <p>
+                            Description: @advertisement.GetSummary()
+                        </p>
+                        <p>
+                            @Html.ActionLink("Read More", "Details", "Advertisement", new { @id = advertisement.Id }, new { @class = "btn-xs btn-default" })
+                        </p>
+                        <footer>
+                            <small class="author">
+                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null)
+                                
+                            </small>
+                        </footer>
+                    </article>
+                </div>
+                <hr />
+            }
+        }
+        @if (Model.Where(a => a.IsSold == true).ToList().Count == 0)
+        {
+            <div class="text-muted">
+                Няма намерени резултати.
+            </div>
+            <hr />
+        }
+    </div>
+</div>

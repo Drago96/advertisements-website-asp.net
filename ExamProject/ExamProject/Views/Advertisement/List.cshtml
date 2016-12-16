@@ -4,6 +4,13 @@
     ViewBag.Title = "List";
 }
 
+@using (Html.BeginForm("Search", "Advertisement", new { @class = "search-bar" }, FormMethod.Get))
+{
+    <div class="search-bar">
+    @Html.TextBox("searchString", null, new { @class = "form-control col-sm-4" })
+   <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+}
 <div class="container">
     <div class="row">
         <h1>Активни обяви:</h1>
@@ -27,7 +34,8 @@
                     </p>
                     <footer >
                         <small class="author">
-                            Seller: @advertisement.Seller.FullName
+                            Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null)
+                            
                         </small>
                     </footer>
                 </article>
@@ -35,6 +43,13 @@
             <hr />
             }
 
+        }
+        @if (Model.Where(a => a.IsSold == false).ToList().Count == 0)
+        {
+            <div class="text-muted">
+                Няма налични обяви.
+            </div>
+            <hr />
         }
         <h1>Завършени продажби:</h1>
         @foreach (var advertisement in Model)
@@ -57,13 +72,20 @@
                         </p>
                         <footer>
                             <small class="author">
-                                Seller: @advertisement.Seller.FullName
+                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null) 
                             </small>
                         </footer>
                     </article>
                 </div>
                 <hr />
             }
+        }
+        @if (Model.Where(a => a.IsSold == true).ToList().Count == 0)
+        {
+            <div class="text-muted">
+                Няма налични обяви.
+            </div>
+            <hr />
         }
     </div>
 </div>

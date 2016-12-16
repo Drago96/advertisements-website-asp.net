@@ -267,6 +267,26 @@ namespace ExamProject.Controllers
             }
         }
 
+        //GET: Advertisement/Search
+        public ActionResult Search (string searchString)
+        {
+            if(searchString == null || searchString=="")
+            {
+                return RedirectToAction("List");
+            }
+            using (var database = new ApplicationDbContext())
+            {
+                var searchWords = searchString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var advertisements = new List<Advertisement>();
+                foreach (var searchWord in searchWords)
+                {
+                    advertisements.AddRange(database.Advertisements.Where(a => a.Title.Contains(searchWord)).Include(a => a.Seller).ToList());
+                }
+                ViewBag.searchString = searchString;
+                return View(advertisements);
+            }
+        }
+
         private void SetImage(Advertisement advertisement, HttpPostedFileBase ImageUpload)
         {
             var validImageTypes = new string[]

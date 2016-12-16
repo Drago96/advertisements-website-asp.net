@@ -76,6 +76,9 @@
                 <div>
                     E-mail за връзка: @Model.Seller.Email
                 </div>
+                <div>
+                    @Html.ActionLink("Профил на продавача", "Details", "Account", new { @name = Model.Seller.Email }, null)
+                </div>
                 <footer class="pull-right">
                     @if (User.IsInRole("Admin") || Model.IsSeller(User.Identity.Name))
                     {
