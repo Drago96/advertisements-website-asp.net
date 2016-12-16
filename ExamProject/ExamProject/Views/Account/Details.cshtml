@@ -22,6 +22,12 @@
             }
         }
         @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
+        <hr />
+        <h3>Мнения за потребителя: </h3>
+        @foreach(var comment in Model.ProfileComments)
+        {
+
+        }
     </div>
     
 </div>

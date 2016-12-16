@@ -13,6 +13,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Security;
+using System.Data.Entity;
 
 namespace ExamProject.Controllers
 {
@@ -500,7 +501,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var user = database.Users.Where(u => u.Email == name).First();
+                var user = database.Users.Where(u => u.Email == name).Include(u => u.ProfileComments).First();
 
                 var advertisements = database.Advertisements.Where(a => a.SellerId == user.Id).ToList();
 

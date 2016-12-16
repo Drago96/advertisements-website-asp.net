@@ -24,6 +24,32 @@ namespace ExamProject.Models
         [Birthday]
         public string Birthday { get; set; }
 
+        private ICollection<Comment> writtenComments;
+
+        public virtual ICollection<Comment> WrittenComments
+        {
+            get { return this.writtenComments; }
+            set { this.writtenComments = value; }
+        }
+
+        private ICollection<Comment> profileComments;
+
+        public virtual ICollection<Comment> ProfileComments
+        {
+            get { return this.profileComments; }
+            set { this.profileComments = value; }
+        }
+
+        
+
+        
+
+        public ApplicationUser()
+        {
+            this.writtenComments = new HashSet<Comment>();
+            this.profileComments = new HashSet<Comment>();
+        }
+
        
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

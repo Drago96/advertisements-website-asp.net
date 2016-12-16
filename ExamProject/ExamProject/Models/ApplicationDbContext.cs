@@ -16,6 +16,8 @@ namespace ExamProject.Models
 
         public virtual IDbSet<Advertisement> Advertisements { get; set; }
 
+        public virtual IDbSet<Comment> Comments { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
