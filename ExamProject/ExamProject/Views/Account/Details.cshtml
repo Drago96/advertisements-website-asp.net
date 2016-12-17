@@ -33,7 +33,7 @@
                 @comment.CreatedOn
             </div>
             <div>
-               
+               @comment.Author.FullName
             </div>
         }
         @if (Request.IsAuthenticated && this.User.Identity.Name != Model.Email)
