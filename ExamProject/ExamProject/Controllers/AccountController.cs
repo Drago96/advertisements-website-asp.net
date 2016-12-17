@@ -492,6 +492,7 @@ namespace ExamProject.Controllers
         #endregion
 
         //GET: Account/Details
+        [AllowAnonymous]
         public ActionResult Details(string name)
         {
             if(name == null)
@@ -501,11 +502,8 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var user = database.Users.Where(u => u.Email == name).Include(u => u.ProfileComments).First();
+                var user = database.Users.Where(u => u.Email == name).Include(u => u.ProfileComments).Include(u => u.Advertisements).First();
 
-                var advertisements = database.Advertisements.Where(a => a.SellerId == user.Id).ToList();
-
-                ViewBag.advertisements = advertisements;
 
                 if(user==null)
                 {
@@ -653,9 +651,9 @@ namespace ExamProject.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                var userAdds = database.Advertisements.Where(a => a.SellerId == user.Id);
+               
 
-                foreach(var advertisement in userAdds)
+                foreach(var advertisement in user.Advertisements.ToList())
                 {
                     var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
 
@@ -672,10 +670,21 @@ namespace ExamProject.Controllers
                     database.Advertisements.Remove(advertisement);
                 }
 
-              
-                    database.Users.Remove(user);
-                    database.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                foreach(var comment in user.ProfileComments.ToList())
+                {
+                    database.Comments.Remove(comment);
+                }
+
+                foreach (var comment in user.WrittenComments.ToList())
+                {
+                    database.Comments.Remove(comment);
+                }
+
+
+
+                database.Users.Remove(user);
+                database.SaveChanges();
+                return RedirectToAction("Index", "Home");
                 
             }
         }

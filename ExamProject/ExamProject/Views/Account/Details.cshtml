@@ -12,7 +12,7 @@
         <div>Дата на раждане: @Model.Birthday</div>
         <div>Пол: @Model.Gender</div>
         <div>Телефонен номер: @Model.PhoneNumber</div>
-        <div>Брой обяви: @((ViewBag.advertisements as ICollection<ExamProject.Models.Advertisement>).Count)</div>
+        <div>Брой обяви: @Model.Advertisements.Count</div>
         @if (this.User.IsInRole("Admin") || this.User.Identity.Name == Model.Email)
         {
             @Html.ActionLink("Edit", "Edit", "Account", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
@@ -26,8 +26,30 @@
         <h3>Мнения за потребителя: </h3>
         @foreach(var comment in Model.ProfileComments)
         {
-
+            <div>
+               @comment.Content
+            </div>
+            <div>
+                @comment.CreatedOn
+            </div>
+            <div>
+               
+            </div>
         }
+        @if (Request.IsAuthenticated && this.User.Identity.Name != Model.Email)
+        {
+            <div>Добави мнение:</div>
+        using (Html.BeginForm("Create", "Comment", new { @authorName = this.User.Identity.Name, @targetName = Model.Email }, FormMethod.Post))
+        {
+            <div>
+                @Html.TextArea("Content", new { @class = "form-control", @rows = "7", @columns = "10" })
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        }
+        }
+        </div>
     </div>
     
-</div>
+

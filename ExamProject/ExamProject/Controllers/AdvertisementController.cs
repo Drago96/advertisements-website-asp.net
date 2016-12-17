@@ -59,13 +59,20 @@ namespace ExamProject.Controllers
 
                     var advertisement = new Advertisement(sellerId, model.Title, model.Description, model.Price);
 
-                    
-                   
+                    var seller = database.Users
+                        .Where(u => u.UserName == this.User.Identity.Name)
+                        .First();
 
+                    seller.Advertisements.Add(advertisement);
+
+
+
+                    database.Entry(seller).State = EntityState.Modified;
                     database.Advertisements.Add(advertisement);
                     database.SaveChanges();
 
                     this.SetImage(advertisement, model.ImageUpload);
+
 
                     database.Entry(advertisement).State = EntityState.Modified;
                     database.SaveChanges();

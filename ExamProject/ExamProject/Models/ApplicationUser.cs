@@ -40,7 +40,13 @@ namespace ExamProject.Models
             set { this.profileComments = value; }
         }
 
-        
+        private ICollection<Advertisement> advertisements;
+
+        public virtual ICollection<Advertisement> Advertisements
+        {
+            get { return this.advertisements; }
+            set { this.advertisements = value; }
+        }
 
         
 
@@ -48,6 +54,7 @@ namespace ExamProject.Models
         {
             this.writtenComments = new HashSet<Comment>();
             this.profileComments = new HashSet<Comment>();
+            this.advertisements = new HashSet<Advertisement>();
         }
 
        
