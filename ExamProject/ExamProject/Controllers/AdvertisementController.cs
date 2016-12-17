@@ -202,6 +202,7 @@ namespace ExamProject.Controllers
                 model.Title = advertisement.Title;
                 model.ImageUrl = advertisement.ImageUrl;
                 model.IsSold = advertisement.IsSold;
+                ViewBag.Id = advertisement.Id;
 
                 return View(model);
             }
@@ -237,11 +238,11 @@ namespace ExamProject.Controllers
                 {
                     this.SetImage(advertisement, model.ImageUpload);
                 }
-
+                
                 database.Entry(advertisement).State = EntityState.Modified;
                 database.SaveChanges();
 
-                return RedirectToAction("List");
+                return RedirectToAction("Details", "Advertisement", new { @id = advertisement.Id });
             }
 
 
@@ -269,7 +270,7 @@ namespace ExamProject.Controllers
                 database.Entry(advertisement).State = EntityState.Modified;
                 database.SaveChanges();
 
-                return RedirectToAction("List");
+                return RedirectToAction("Details", "Advertisement", new { @id = advertisement.Id });
 
             }
         }

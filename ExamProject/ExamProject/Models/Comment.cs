@@ -44,5 +44,10 @@ namespace ExamProject.Models
 
         public virtual ApplicationUser Target { get; set; }
 
+        public bool IsAuthor(string name)
+        {
+            return this.Author.UserName.Equals(name);
+        }
+
     }
 }

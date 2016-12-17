@@ -591,13 +591,14 @@ namespace ExamProject.Controllers
                     database.Entry(user).State = System.Data.Entity.EntityState.Modified;
                     database.SaveChanges();
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Details", "Account", new { @name = user.UserName });
                 }
             }
 
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         //GET: Account/Delete
         public ActionResult Delete(string id)
         {
@@ -684,7 +685,7 @@ namespace ExamProject.Controllers
 
                 database.Users.Remove(user);
                 database.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("List", "User");
                 
             }
         }

@@ -23,18 +23,33 @@
         }
         @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
         <hr />
-        <h3>Мнения за потребителя: </h3>
+        <h3 class="paddedheader">Мнения за потребителя: </h3>
         @foreach(var comment in Model.ProfileComments)
         {
             <div>
                @comment.Content
             </div>
-            <div>
-                @comment.CreatedOn
+            <div class="small">
+                Написано от: @comment.Author.FullName
             </div>
-            <div>
-               @comment.Author.FullName
+            <div class="small">
+               На:  @comment.CreatedOn
             </div>
+            if (User.IsInRole("Admin") || @comment.IsAuthor(User.Identity.Name))
+            {
+                @Html.ActionLink("Edit", "Edit", "Comment", new { @id = comment.Id }, new { @class = "btn btn-success btn-xs"  }) 
+                <span> </span>
+                @Html.ActionLink("Delete", "Delete", "Comment", new { @id = comment.Id }, new { @class = "btn btn-danger btn-xs" })
+            }
+            <hr />
+            
+        }
+        @if(Model.ProfileComments.Count == 0)
+        {
+            <div>
+                Няма мнения за потребителя.
+            </div>
+            <hr />
         }
         @if (Request.IsAuthenticated && this.User.Identity.Name != Model.Email)
         {
