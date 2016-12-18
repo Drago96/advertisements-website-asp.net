@@ -20,9 +20,9 @@
 }
 <div class="container">
     <div class="row">
-        <h2>Резултати от търсенето за: @ViewBag.searchString</h2>
-        <h3>Категория: @ViewBag.categoryName</h3>
-        <h1>Активни обяви:</h1>
+        <h2>Results from search for: @ViewBag.searchString</h2>
+        <h3>Category: @ViewBag.categoryName</h3>
+        <h1>Active offers:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == false)
@@ -57,11 +57,11 @@
         @if(Model.Where(a => a.IsSold == false).ToList().Count == 0)
         {
             <div class="text-muted">
-                Няма намерени резултати.
+                No results found.
             </div>
             <hr />
         }
-        <h1>Завършени продажби:</h1>
+        <h1>Closed offers:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == true)
@@ -95,7 +95,7 @@
         @if (Model.Where(a => a.IsSold == true).ToList().Count == 0)
         {
             <div class="text-muted">
-                Няма намерени резултати.
+                No results found.
             </div>
             <hr />
         }

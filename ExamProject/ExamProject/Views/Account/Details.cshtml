@@ -5,14 +5,14 @@
 }
 
 <div class="container">
-    <h2 class="details">Информация за потребител: @Model.UserName</h2>
+    <h2 class="details">Information for User: @Model.UserName</h2>
     <div class="col-sm-4">
-        <div>Пълно име: @Model.FullName</div>
+        <div>Full Name: @Model.FullName</div>
         <div>Email: @Model.Email </div>
-        <div>Дата на раждане: @Model.Birthday</div>
-        <div>Пол: @Model.Gender</div>
-        <div>Телефонен номер: @Model.PhoneNumber</div>
-        <div>Брой обяви: @Model.Advertisements.Count</div>
+        <div>Birth Date: @Model.Birthday</div>
+        <div>Gender: @Model.Gender</div>
+        <div>Phone Number: @Model.PhoneNumber</div>
+        <div>Number of Posts: @Model.Advertisements.Count</div>
         @if (this.User.IsInRole("Admin") || this.User.Identity.Name == Model.Email)
         {
             @Html.ActionLink("Edit", "Edit", "Account", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
@@ -21,16 +21,16 @@
             @Html.ActionLink("Delete", "Delete", "Account", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
             }
         }
-        @Html.ActionLink("Back", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
+        @Html.ActionLink("Home", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
         <hr />
-        <h3 class="paddedheader">Мнения за потребителя: </h3>
+        <h3 class="paddedheader">Reviews for User: </h3>
         @foreach(var comment in Model.ProfileComments)
         {
             <div>
                @comment.Content
             </div>
             <div class="small">
-                Написано от: @comment.Author.FullName
+                Written by: @comment.Author.FullName
             </div>
             <div class="small">
                На:  @comment.CreatedOn
@@ -47,13 +47,13 @@
         @if(Model.ProfileComments.Count == 0)
         {
             <div>
-                Няма мнения за потребителя.
+                User has no profile reviews.
             </div>
             <hr />
         }
         @if (Request.IsAuthenticated && this.User.Identity.Name != Model.Email)
         {
-            <div>Добави мнение:</div>
+            <div>Add review:</div>
         using (Html.BeginForm("Create", "Comment", new { @authorName = this.User.Identity.Name, @targetName = Model.Email }, FormMethod.Post))
         {
             <div>

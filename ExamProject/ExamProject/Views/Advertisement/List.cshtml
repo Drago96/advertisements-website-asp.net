@@ -18,7 +18,7 @@
 }
 <div class="container">
     <div class="row">
-        <h1>Активни обяви:</h1>
+        <h1>Active offers:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == false)
@@ -53,11 +53,11 @@
         @if (Model.Where(a => a.IsSold == false).ToList().Count == 0)
         {
             <div class="text-muted">
-                Няма налични обяви.
+                No offers available.
             </div>
             <hr />
         }
-        <h1>Завършени продажби:</h1>
+        <h1>Closed offers:</h1>
         @foreach (var advertisement in Model)
         {
             if (advertisement.IsSold == true)
@@ -90,7 +90,7 @@
         @if (Model.Where(a => a.IsSold == true).ToList().Count == 0)
         {
             <div class="text-muted">
-                Няма налични обяви.
+                No offers available.
             </div>
             <hr />
         }

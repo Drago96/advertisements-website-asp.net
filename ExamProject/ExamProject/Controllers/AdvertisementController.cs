@@ -99,7 +99,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Seller).First();
+                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Seller).Include(a => a.Category).First();
 
                 if(advertisement==null)
                 {
