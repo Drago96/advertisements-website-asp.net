@@ -44,6 +44,15 @@
             </div>
 
             <div class="form-group">
+                @Html.LabelFor(m => m.CategoryId, new { @class = "control-label col-sm-4" })
+                <div class="dropdown col-sm-4">
+                    @Html.DropDownListFor(m => m.CategoryId,
+                        new SelectList(Model.Categories, "Id", "Name", Model.CategoryId),
+                        new { @class = "btn btn-info col-sm-12" })
+                </div>
+            </div>
+
+            <div class="form-group">
                 @Html.LabelFor(m => m.ImageUrl, new { @class = "col-sm-4 control-label" })
                 <div class="col-sm-4">
                     @if (Model.ImageUrl != null)

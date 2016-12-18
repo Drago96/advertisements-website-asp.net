@@ -15,7 +15,7 @@ namespace ExamProject.Models
             this.CreationDate = DateTime.Now;
         }
 
-        public Advertisement(string sellerId,string title, string description, double price)
+        public Advertisement(string sellerId,string title, string description, double price, int categoryId)
         {
             this.SellerId = sellerId;
             this.Title = title;
@@ -23,6 +23,7 @@ namespace ExamProject.Models
             this.Price = System.Math.Round(price, 2);
             this.IsSold = false;
             this.CreationDate = DateTime.Now;
+            this.CategoryId = categoryId;
         }
 
         [Key]
@@ -53,6 +54,12 @@ namespace ExamProject.Models
 
         [Required]
         public double Price { get; set; }
+
+        [ForeignKey("Category")]
+        [Display(Name ="Category Name")]
+        public int CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
 
         public string GetSummary()
         {

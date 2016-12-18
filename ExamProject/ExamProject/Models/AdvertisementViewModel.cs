@@ -25,6 +25,11 @@ namespace ExamProject.Models
         [Required]
         public double Price { get; set; }
 
+        [Display(Name = "Category Name")]
+        public int CategoryId { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
+
 
     }
 }

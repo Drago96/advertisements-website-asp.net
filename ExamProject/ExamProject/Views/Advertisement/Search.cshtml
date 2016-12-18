@@ -9,12 +9,19 @@
 {
     <div class="search-bar">
         @Html.TextBox("searchString", null, new { @class = "form-control col-sm-4" })
+        <div>
+            @Html.DropDownList("categoryName",
+                        new SelectList(ViewBag.categories),
+                        new { @class = "btn btn-info col-sm-12" })
+        </div>
+
         <button type="submit" class="btn btn-primary">Search</button>
     </div>
 }
 <div class="container">
     <div class="row">
         <h2>Резултати от търсенето за: @ViewBag.searchString</h2>
+        <h3>Категория: @ViewBag.categoryName</h3>
         <h1>Активни обяви:</h1>
         @foreach (var advertisement in Model)
         {
@@ -36,7 +43,8 @@
                         </p>
                         <footer>
                             <small class="author">
-                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null)
+                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
+                                Category: @advertisement.Category.Name
                                 
                             </small>
                         </footer>
@@ -74,7 +82,8 @@
                         </p>
                         <footer>
                             <small class="author">
-                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null)
+                                Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
+                                Category: @advertisement.Category.Name
                                 
                             </small>
                         </footer>

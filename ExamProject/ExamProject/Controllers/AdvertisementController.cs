@@ -24,7 +24,11 @@ namespace ExamProject.Controllers
             {
                 var advertisements = database.Advertisements
                     .Include(a => a.Seller)
+                    .Include(a => a.Category)
                     .ToList();
+
+                ViewBag.categories =new List<string>{ "All" };
+                ViewBag.categories.AddRange(database.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList());
 
                 return View(advertisements);
 
@@ -38,6 +42,7 @@ namespace ExamProject.Controllers
             using (var database = new ApplicationDbContext())
             {
                 var model = new AdvertisementViewModel();
+                model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
                 return View(model);
             }
                 
@@ -57,7 +62,7 @@ namespace ExamProject.Controllers
                         .First()
                         .Id;
 
-                    var advertisement = new Advertisement(sellerId, model.Title, model.Description, model.Price);
+                    var advertisement = new Advertisement(sellerId, model.Title, model.Description, model.Price, model.CategoryId);
 
                     var seller = database.Users
                         .Where(u => u.UserName == this.User.Identity.Name)
@@ -114,7 +119,7 @@ namespace ExamProject.Controllers
             }
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Category).First();
 
                 if(!IsAuthorizedToEdit(advertisement))
                 {
@@ -202,6 +207,8 @@ namespace ExamProject.Controllers
                 model.Title = advertisement.Title;
                 model.ImageUrl = advertisement.ImageUrl;
                 model.IsSold = advertisement.IsSold;
+                model.CategoryId = advertisement.CategoryId;
+                model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
                 ViewBag.Id = advertisement.Id;
 
                 return View(model);
@@ -234,6 +241,7 @@ namespace ExamProject.Controllers
                 advertisement.Description = model.Description;
                 advertisement.Price = model.Price;
                 advertisement.IsSold = model.IsSold;
+                advertisement.CategoryId = model.CategoryId;
                 if(model.ImageUpload!=null)
                 {
                     this.SetImage(advertisement, model.ImageUpload);
@@ -276,9 +284,9 @@ namespace ExamProject.Controllers
         }
 
         //GET: Advertisement/Search
-        public ActionResult Search (string searchString)
+        public ActionResult Search (string categoryName,string searchString)
         {
-            if(searchString == null || searchString=="")
+            if(searchString == null || searchString=="" || categoryName == "" || categoryName == null)
             {
                 return RedirectToAction("List");
             }
@@ -286,11 +294,33 @@ namespace ExamProject.Controllers
             {
                 var searchWords = searchString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 var advertisements = new List<Advertisement>();
-                foreach (var searchWord in searchWords)
+                if (categoryName == "All")
                 {
-                    advertisements.AddRange(database.Advertisements.Where(a => a.Title.Contains(searchWord)).Include(a => a.Seller).ToList());
+                    foreach (var searchWord in searchWords)
+                    {
+                        advertisements.AddRange(database.Advertisements
+                            .Where(a => a.Title.Contains(searchWord))
+                            .Include(a => a.Seller)
+                            .Include(a => a.Category)
+                            .ToList());
+                    }
+                }
+                else
+                {
+                    var category = database.Categories.Where(c => c.Name == categoryName).FirstOrDefault();
+                    foreach (var searchWord in searchWords)
+                    {
+                        advertisements.AddRange(database.Advertisements
+                            .Where(a => a.Title.Contains(searchWord) && a.CategoryId == category.Id)
+                            .Include(a => a.Seller)
+                            .Include(a => a.Category)
+                            .ToList());
+                    }
                 }
                 ViewBag.searchString = searchString;
+                ViewBag.categoryName = categoryName;
+                ViewBag.categories = new List<string> { "All" };
+                ViewBag.categories.AddRange(database.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList());
                 return View(advertisements);
             }
         }

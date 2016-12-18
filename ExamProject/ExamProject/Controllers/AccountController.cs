@@ -502,7 +502,11 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var user = database.Users.Where(u => u.Email == name).Include(u => u.ProfileComments).Include(u => u.ProfileComments.Select(c =>c.Author)).Include(u => u.Advertisements).First();
+                var user = database.Users.Where(u => u.Email == name)
+                    .Include(u => u.ProfileComments)
+                    .Include(u => u.ProfileComments.Select(c =>c.Author))
+                    .Include(u => u.Advertisements)
+                    .FirstOrDefault();
 
 
                 if(user==null)

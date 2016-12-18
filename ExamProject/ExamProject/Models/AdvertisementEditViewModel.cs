@@ -33,5 +33,10 @@ namespace ExamProject.Models
         [DataType(DataType.Upload)]
         [Image]
         public HttpPostedFileBase ImageUpload { get; set; }
+
+        [Display(Name = "Category Name")]
+        public int CategoryId { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
     }
 }

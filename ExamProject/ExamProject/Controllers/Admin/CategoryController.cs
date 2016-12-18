@@ -1,6 +1,7 @@
 ﻿using ExamProject.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -132,6 +133,18 @@ namespace ExamProject.Controllers
 
                 foreach(var advertisement in categoryAdvertisements)
                 {
+                    var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
+
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+
+                    var directory = new DirectoryInfo(Server.MapPath("~") + "uploads/" + advertisement.Id);
+                    if (directory.Exists)
+                    {
+                        directory.Delete(true);
+                    }
                     database.Advertisements.Remove(advertisement);
                 }
 
