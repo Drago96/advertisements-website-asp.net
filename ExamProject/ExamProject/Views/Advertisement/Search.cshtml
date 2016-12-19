@@ -20,7 +20,10 @@
 }
 <div class="container">
     <div class="row">
-        <h2>Results from search for: @ViewBag.searchString</h2>
+        @if (ViewBag.searchString != "")
+        {
+            <h2>Results from search for: @ViewBag.searchString</h2>
+        }
         <h3>Category: @ViewBag.categoryName</h3>
         <h1>Active offers:</h1>
         @foreach (var advertisement in Model)

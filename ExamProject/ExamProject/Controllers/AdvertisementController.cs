@@ -286,7 +286,7 @@ namespace ExamProject.Controllers
         //GET: Advertisement/Search
         public ActionResult Search (string categoryName,string searchString)
         {
-            if(searchString == null || searchString=="" || categoryName == "" || categoryName == null)
+            if(searchString == null || (searchString=="" && categoryName == "All") || categoryName == "" || categoryName == null)
             {
                 return RedirectToAction("List");
             }
@@ -308,14 +308,28 @@ namespace ExamProject.Controllers
                 else
                 {
                     var category = database.Categories.Where(c => c.Name == categoryName).FirstOrDefault();
-                    foreach (var searchWord in searchWords)
+
+                    if (searchWords.Count() == 0)
                     {
                         advertisements.AddRange(database.Advertisements
-                            .Where(a => a.Title.Contains(searchWord) && a.CategoryId == category.Id)
-                            .Include(a => a.Seller)
-                            .Include(a => a.Category)
-                            .ToList());
+                         .Where(a => a.CategoryId == category.Id)
+                         .Include(a => a.Seller)
+                         .Include(a => a.Category)
+                         .ToList());
                     }
+                    else
+                    {
+                        foreach (var searchWord in searchWords)
+                        {
+                            advertisements.AddRange(database.Advertisements
+                               .Where(a => a.Title.Contains(searchWord) && a.CategoryId == category.Id)
+                               .Include(a => a.Seller)
+                               .Include(a => a.Category)
+                               .ToList());
+                        }
+                    }
+                    
+                    
                 }
                 ViewBag.searchString = searchString;
                 ViewBag.categoryName = categoryName;
