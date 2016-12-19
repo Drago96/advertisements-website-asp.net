@@ -18,7 +18,7 @@
             @Html.ActionLink("Edit", "Edit", "Account", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
             if (this.User.IsInRole("Admin") && this.User.Identity.Name != Model.Email)
             {
-            @Html.ActionLink("Delete", "Delete", "Account", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            @Html.ActionLink("Delete", "Delete", "User", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
             }
         }
         @Html.ActionLink("Home", "Index", "Advertisement", null, new { @class = "btn btn-default btn-xs" })
@@ -33,7 +33,7 @@
                 Written by: @comment.Author.FullName
             </div>
             <div class="small">
-               На:  @comment.CreatedOn
+               On:  @comment.CreatedOn
             </div>
             if (User.IsInRole("Admin") || @comment.IsAuthor(User.Identity.Name))
             {

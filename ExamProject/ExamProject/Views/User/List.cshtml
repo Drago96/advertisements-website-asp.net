@@ -38,7 +38,7 @@
                            @Html.ActionLink("Edit", "Edit", "Account", new { @id = user.Id }, null)
                             @if (this.User.Identity.Name != user.Email)
                             {
-                            @Html.ActionLink("Delete", "Delete", "Account", new { @id = user.Id }, null)
+                            @Html.ActionLink("Delete", "Delete", "User", new { @id = user.Id }, null)
                             }
                         </td>
                 }

@@ -305,7 +305,7 @@
     <Content Include="Views\User\List.cshtml" />
     <Content Include="Views\Account\Details.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
-    <Content Include="Views\Account\Delete.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Advertisement\Search.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Comment\Delete.cshtml" />
