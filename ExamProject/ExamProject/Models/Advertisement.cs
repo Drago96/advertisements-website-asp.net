@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -78,14 +79,7 @@ namespace ExamProject.Models
             return this.Seller.UserName.Equals(name);
         }
 
-        public void MarkSold()
-        {
-            if(this.IsSold == false)
-            {
-                this.IsSold =true;
-            }
-        }
-
+       
 
         
     }

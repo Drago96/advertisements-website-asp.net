@@ -75,6 +75,7 @@ namespace ExamProject.Controllers
 
                 var model = new CommentEditViewModel();
                 model.Content = comment.Content;
+                model.TargetName = comment.Target.UserName;
 
                 return View(model);
             }
@@ -135,6 +136,7 @@ namespace ExamProject.Controllers
 
                 var model = new CommentEditViewModel();
                 model.Content = comment.Content;
+                model.TargetName = comment.Target.UserName;
 
                 return View(model);
             }

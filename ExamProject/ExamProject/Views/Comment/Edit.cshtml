@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-4">
-                    @Html.ActionLink("Cancel", "Index", "Advertisement", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", "Details", "Account", new { @name = Model.TargetName }, new { @class = "btn btn-default" })
                     <input type="submit" value="Edit" class="btn btn-success" />
                 </div>
             </div>

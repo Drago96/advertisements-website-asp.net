@@ -4,7 +4,7 @@
     ViewBag.Title = "List";
 }
 
-@using (Html.BeginForm("Search", "Advertisement", new { @class = "search-bar" }, FormMethod.Get))
+@using (Html.BeginForm("Search", "Home", new { @class = "search-bar" }, FormMethod.Get))
 {
     <div class="search-bar">
     @Html.TextBox("searchString", null, new { @class = "form-control col-sm-4" })

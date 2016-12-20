@@ -10,5 +10,8 @@ namespace ExamProject.Models
     {
         [Required]
         public string Content { get; set; }
+
+        [Required]
+        public string TargetName { get; set; }
     }
 }

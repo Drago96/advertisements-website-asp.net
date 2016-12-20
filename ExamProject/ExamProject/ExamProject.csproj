@@ -297,7 +297,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Advertisement\List.cshtml" />
+    <Content Include="Views\Home\List.cshtml" />
     <Content Include="Views\Advertisement\Create.cshtml" />
     <Content Include="Views\Advertisement\Details.cshtml" />
     <Content Include="Views\Advertisement\Delete.cshtml" />
@@ -306,7 +306,7 @@
     <Content Include="Views\Account\Details.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
-    <Content Include="Views\Advertisement\Search.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Comment\Delete.cshtml" />
     <Content Include="Views\Category\List.cshtml" />
