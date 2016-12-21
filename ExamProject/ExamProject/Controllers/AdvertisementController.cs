@@ -75,7 +75,11 @@ namespace ExamProject.Controllers
                 }
             }
 
-            return View(model);
+            using (var database = new ApplicationDbContext())
+            {
+                model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
+                return View(model);
+            }
         }
 
         //GET: Advertisement/Details
@@ -212,34 +216,45 @@ namespace ExamProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            if (ModelState.IsValid)
+            {
+                using (var database = new ApplicationDbContext())
+                {
+                    var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+
+                    if (advertisement == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    if (!IsAuthorizedToEdit(advertisement))
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                    }
+
+                    advertisement.Title = model.Title;
+                    advertisement.Description = model.Description;
+                    advertisement.Price = model.Price;
+                    advertisement.IsSold = model.IsSold;
+                    advertisement.CategoryId = model.CategoryId;
+                    if (model.ImageUpload != null)
+                    {
+                        this.SetImage(advertisement, model.ImageUpload);
+                    }
+
+                    database.Entry(advertisement).State = EntityState.Modified;
+                    database.SaveChanges();
+
+                    return RedirectToAction("Details", "Advertisement", new { @id = advertisement.Id });
+                }
+            }
             using (var database = new ApplicationDbContext())
             {
                 var advertisement = database.Advertisements.Where(a => a.Id == id).First();
-
-                if(advertisement == null)
-                {
-                    return HttpNotFound();
-                }
-
-                if (!IsAuthorizedToEdit(advertisement))
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                }
-
-                advertisement.Title = model.Title;
-                advertisement.Description = model.Description;
-                advertisement.Price = model.Price;
-                advertisement.IsSold = model.IsSold;
-                advertisement.CategoryId = model.CategoryId;
-                if(model.ImageUpload!=null)
-                {
-                    this.SetImage(advertisement, model.ImageUpload);
-                }
-                
-                database.Entry(advertisement).State = EntityState.Modified;
-                database.SaveChanges();
-
-                return RedirectToAction("Details", "Advertisement", new { @id = advertisement.Id });
+                model.Categories= model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
+                model.ImageUrl = advertisement.ImageUrl;
+                ViewBag.id = advertisement.Id;
+                return View(model);
             }
 
 

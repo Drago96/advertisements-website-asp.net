@@ -16,7 +16,7 @@ namespace ExamProject.Models
         [Required]
         public string Description { get; set; }
 
-        [Required]
+       
         [DataType(DataType.ImageUrl)]
         [Display(Name ="Image")]
         public string ImageUrl { get; set; }
@@ -28,7 +28,7 @@ namespace ExamProject.Models
         [Display(Name = "Available")]
         public bool IsSold { get; set; }
 
-        [Required]
+        
         [Display(Name = "Image Edit")]
         [DataType(DataType.Upload)]
         [Image]
