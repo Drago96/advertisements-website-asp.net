@@ -9,6 +9,13 @@ namespace ExamProject.Models
 {
     public class Category
     {
+        private ICollection<Advertisement> advertisements;
+
+        public Category()
+        {
+            this.advertisements = new HashSet<Advertisement>();
+        }
+
         [Key]
         public int Id {get;set;}
 
@@ -17,13 +24,11 @@ namespace ExamProject.Models
         [StringLength(20)]
         public string Name { get; set; }
 
-        public virtual ICollection<Advertisement> Advertisements { get; set; }
-
-        private ICollection<Advertisement> advertisements;
-
-        public Category()
+        public virtual ICollection<Advertisement> Advertisements
         {
-            this.advertisements = new HashSet<Advertisement>();
+            get { return this.advertisements; }
+            set { this.advertisements = value; }
         }
+
     }
 }
