@@ -45,7 +45,7 @@ namespace ExamProject.Controllers.Admin
 
             using (var database = new ApplicationDbContext())
             {
-                var user = database.Users.Where(u => u.Id.Equals(id)).First();
+                var user = database.Users.FirstOrDefault(u => u.Id.Equals(id));
 
                 if (user == null)
                 {
@@ -75,7 +75,7 @@ namespace ExamProject.Controllers.Admin
 
             using (var database = new ApplicationDbContext())
             {
-                var user = database.Users.Where(u => u.Id == id).First();
+                var user = database.Users.FirstOrDefault(u => u.Id.Equals(id));
 
                 if (user == null)
                 {

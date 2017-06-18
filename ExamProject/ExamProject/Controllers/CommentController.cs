@@ -20,15 +20,15 @@ namespace ExamProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if(content == null || content == "")
+            if(string.IsNullOrEmpty(content))
             {
                 return RedirectToAction("Details", "Account", new { name = targetName });
             }
 
             using (var database = new ApplicationDbContext())
             {
-                var author = database.Users.Where(u => u.Email == authorName).First();
-                var target = database.Users.Where(u => u.Email == targetName).First();
+                var author = database.Users.FirstOrDefault(u => u.Email == authorName);
+                var target = database.Users.FirstOrDefault(u => u.Email == targetName);
 
   
 
@@ -61,7 +61,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var comment = database.Comments.Where(c => c.Id == id).First();
+                var comment = database.Comments.FirstOrDefault(c => c.Id == id);
 
                 if(comment==null)
                 {
@@ -122,7 +122,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var comment = database.Comments.Where(c => c.Id == id).First();
+                var comment = database.Comments.FirstOrDefault(c => c.Id == id);
 
                 if (comment == null)
                 {
@@ -155,7 +155,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var comment = database.Comments.Where(c => c.Id == id).Include(c => c.Target).First();
+                var comment = database.Comments.Where(c => c.Id == id).Include(c => c.Target).FirstOrDefault();
 
                 if(comment == null)
                 {

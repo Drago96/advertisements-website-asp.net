@@ -57,9 +57,9 @@ namespace ExamProject.Controllers
                 }
                 else
                 {
-                    var category = database.Categories.Where(c => c.Name == categoryName).FirstOrDefault();
+                    var category = database.Categories.FirstOrDefault(c => c.Name == categoryName);
 
-                    if (searchWords.Count() == 0)
+                    if (!searchWords.Any())
                     {
                         advertisements.AddRange(database.Advertisements
                          .Where(a => a.CategoryId == category.Id)

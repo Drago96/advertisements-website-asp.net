@@ -47,15 +47,13 @@ namespace ExamProject.Controllers
                 using (var database = new ApplicationDbContext())
                 {
                     var sellerId = database.Users
-                        .Where(u => u.UserName == this.User.Identity.Name)
-                        .First()
+                        .FirstOrDefault(u => u.UserName == this.User.Identity.Name)
                         .Id;
 
                     var advertisement = new Advertisement(sellerId, model.Title, model.Description, model.Price, model.CategoryId);
 
                     var seller = database.Users
-                        .Where(u => u.UserName == this.User.Identity.Name)
-                        .First();
+                        .FirstOrDefault(u => u.UserName == this.User.Identity.Name);
 
                     seller.Advertisements.Add(advertisement);
 
@@ -92,7 +90,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Seller).Include(a => a.Category).First();
+                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Seller).Include(a => a.Category).FirstOrDefault();
 
                 if(advertisement==null)
                 {
@@ -112,7 +110,7 @@ namespace ExamProject.Controllers
             }
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Category).First();
+                var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Category).FirstOrDefault();
 
                 if(!IsAuthorizedToEdit(advertisement))
                 {
@@ -140,7 +138,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
                 if(advertisement == null)
                 {
@@ -182,7 +180,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
                 if(advertisement == null)
                 {
@@ -220,7 +218,7 @@ namespace ExamProject.Controllers
             {
                 using (var database = new ApplicationDbContext())
                 {
-                    var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                    var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
                     if (advertisement == null)
                     {
@@ -250,7 +248,7 @@ namespace ExamProject.Controllers
             }
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
                 model.Categories= model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
                 model.ImageUrl = advertisement.ImageUrl;
                 ViewBag.id = advertisement.Id;
@@ -270,7 +268,7 @@ namespace ExamProject.Controllers
 
             using (var database = new ApplicationDbContext())
             {
-                var advertisement = database.Advertisements.Where(a => a.Id == id).First();
+                var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
                 if (!IsAuthorizedToEdit(advertisement))
                 {
@@ -292,7 +290,7 @@ namespace ExamProject.Controllers
 
        
 
-        private void SetImage(Advertisement advertisement, HttpPostedFileBase ImageUpload)
+        private void SetImage(Advertisement advertisement, HttpPostedFileBase imageUpload)
         {
             var validImageTypes = new string[]
              {
@@ -312,13 +310,13 @@ namespace ExamProject.Controllers
                 }
             }
 
-            if (ImageUpload != null && ImageUpload.ContentLength != 0 && validImageTypes.Contains(ImageUpload.ContentType))
+            if (imageUpload != null && imageUpload.ContentLength != 0 && validImageTypes.Contains(imageUpload.ContentType))
             {
                 DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/")+ advertisement.Id);
                 var uploadDir = Server.MapPath("~/uploads/") + advertisement.Id;
-                var imagePath = Path.Combine(uploadDir, ImageUpload.FileName);
-                ImageUpload.SaveAs(imagePath);
-                advertisement.ImageUrl = "/uploads/"+advertisement.Id + "/"+ImageUpload.FileName;
+                var imagePath = Path.Combine(uploadDir, imageUpload.FileName);
+                imageUpload.SaveAs(imagePath);
+                advertisement.ImageUrl = "/uploads/"+advertisement.Id + "/"+imageUpload.FileName;
                 
                 
                 
