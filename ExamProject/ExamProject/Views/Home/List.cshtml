@@ -37,11 +37,10 @@
                     <p>
                         @Html.ActionLink("Read More", "Details", "Advertisement",new { @id = advertisement.Id}, new { @class = "btn-xs btn-default" })
                     </p>
-                    <footer >
+                    <footer>
                         <small class="author">
                             Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
                             Category: @advertisement.Category.Name
-                            
                         </small>
                     </footer>
                 </article>
@@ -65,7 +64,7 @@
                 <div>
                     <article class="container">
                         <header>
-                            <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image"  />
+                            <img src="@Url.Content(@advertisement.ImageUrl)" alt="Image" class="col-sm-4 frontpage-image" />
                             <h2>
                                 @Html.ActionLink(@advertisement.Title, "Details", "Advertisement", new { @id = advertisement.Id }, null)
                             </h2>
@@ -79,7 +78,7 @@
                         <footer>
                             <small class="author">
                                 Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
-                                Category: @advertisement.Category.Name 
+                                Category: @advertisement.Category.Name
                             </small>
                         </footer>
                     </article>

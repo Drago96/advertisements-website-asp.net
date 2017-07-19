@@ -4,7 +4,6 @@
     ViewBag.Title = "Search";
 }
 
-
 @using (Html.BeginForm("Search", "Home", new { @class = "search-bar" }, FormMethod.Get))
 {
     <div class="search-bar">
@@ -48,7 +47,6 @@
                             <small class="author">
                                 Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
                                 Category: @advertisement.Category.Name
-                                
                             </small>
                         </footer>
                     </article>
@@ -87,7 +85,6 @@
                             <small class="author">
                                 Seller: @Html.ActionLink(@advertisement.Seller.FullName, "Details", "Account", new { @name = advertisement.Seller.Email }, null),
                                 Category: @advertisement.Category.Name
-                                
                             </small>
                         </footer>
                     </article>

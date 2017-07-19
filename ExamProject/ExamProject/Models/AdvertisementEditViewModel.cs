@@ -1,8 +1,6 @@
 ﻿using ExamProject.Validations;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Web;
 
 namespace ExamProject.Models
@@ -16,9 +14,8 @@ namespace ExamProject.Models
         [Required]
         public string Description { get; set; }
 
-       
         [DataType(DataType.ImageUrl)]
-        [Display(Name ="Image")]
+        [Display(Name = "Image")]
         public string ImageUrl { get; set; }
 
         [Required]
@@ -28,7 +25,6 @@ namespace ExamProject.Models
         [Display(Name = "Available")]
         public bool IsSold { get; set; }
 
-        
         [Display(Name = "Image Edit")]
         [DataType(DataType.Upload)]
         [Image]

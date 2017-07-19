@@ -1,17 +1,15 @@
 ﻿using ExamProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ExamProject.Controllers.Admin
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         // GET: User
@@ -34,7 +32,6 @@ namespace ExamProject.Controllers.Admin
             }
         }
 
-       
         //GET: User/Delete
         public ActionResult Delete(string id)
         {
@@ -58,8 +55,6 @@ namespace ExamProject.Controllers.Admin
                 }
 
                 return View(user);
-
-
             }
         }
 
@@ -86,8 +81,6 @@ namespace ExamProject.Controllers.Admin
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
-
-
 
                 foreach (var advertisement in user.Advertisements.ToList())
                 {
@@ -116,12 +109,9 @@ namespace ExamProject.Controllers.Admin
                     database.Comments.Remove(comment);
                 }
 
-
-
                 database.Users.Remove(user);
                 database.SaveChanges();
                 return RedirectToAction("List", "User");
-
             }
         }
 
@@ -132,9 +122,9 @@ namespace ExamProject.Controllers.Admin
 
             var admins = new HashSet<string>();
 
-            foreach(var user in users)
+            foreach (var user in users)
             {
-                if(userManager.IsInRole(user.Id,"Admin"))
+                if (userManager.IsInRole(user.Id, "Admin"))
                 {
                     admins.Add(user.UserName);
                 }

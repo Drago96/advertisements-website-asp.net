@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace ExamProject.Models
 {
@@ -17,10 +14,10 @@ namespace ExamProject.Models
         }
 
         [Key]
-        public int Id {get;set;}
+        public int Id { get; set; }
 
         [Required]
-        [Index(IsUnique=true)]
+        [Index(IsUnique = true)]
         [StringLength(20)]
         public string Name { get; set; }
 
@@ -29,6 +26,5 @@ namespace ExamProject.Models
             get { return this.advertisements; }
             set { this.advertisements = value; }
         }
-
     }
 }

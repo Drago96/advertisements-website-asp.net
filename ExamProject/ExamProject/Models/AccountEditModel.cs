@@ -1,16 +1,11 @@
 ﻿using ExamProject.Validations;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ExamProject.Models
 {
     public class AccountEditModel
     {
-
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -30,7 +25,7 @@ namespace ExamProject.Models
         public string Password { get; set; }
 
         [Display(Name = "Confirm Password")]
-        [Compare("Password",ErrorMessage = "Passwords do not match")]
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
 
         [Required]

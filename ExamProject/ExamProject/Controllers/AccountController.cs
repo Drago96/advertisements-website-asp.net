@@ -1,19 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿using ExamProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using ExamProject.Models;
-using System.Net;
 using System.Collections.Generic;
-using System.IO;
-using System.Web.Security;
 using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace ExamProject.Controllers
 {
@@ -27,7 +22,7 @@ namespace ExamProject.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -39,9 +34,9 @@ namespace ExamProject.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -85,10 +80,13 @@ namespace ExamProject.Controllers
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -121,17 +119,19 @@ namespace ExamProject.Controllers
                 return View(model);
             }
 
-            // The following code protects for brute force attacks against the two factor codes. 
-            // If a user enters incorrect codes for a specified amount of time then the user account 
-            // will be locked out for a specified amount of time. 
+            // The following code protects for brute force attacks against the two factor codes.
+            // If a user enters incorrect codes for a specified amount of time then the user account
+            // will be locked out for a specified amount of time.
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(model.ReturnUrl);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid code.");
@@ -156,16 +156,14 @@ namespace ExamProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, PhoneNumber = model.PhoneNumber , Gender=model.Gender, Birthday=model.Birthday};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, PhoneNumber = model.PhoneNumber, Gender = model.Gender, Birthday = model.Birthday };
                 var result = await UserManager.CreateAsync(user, model.Password);
-
-                
 
                 if (result.Succeeded)
                 {
                     var addToResult = UserManager.AddToRole(user.Id, "User");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -221,7 +219,7 @@ namespace ExamProject.Controllers
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
@@ -343,10 +341,13 @@ namespace ExamProject.Controllers
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
@@ -433,6 +434,7 @@ namespace ExamProject.Controllers
         }
 
         #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -489,13 +491,14 @@ namespace ExamProject.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+
+        #endregion Helpers
 
         //GET: Account/Details
         [AllowAnonymous]
         public ActionResult Details(string name)
         {
-            if(name == null)
+            if (name == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -504,12 +507,11 @@ namespace ExamProject.Controllers
             {
                 var user = database.Users.Where(u => u.Email == name)
                     .Include(u => u.ProfileComments)
-                    .Include(u => u.ProfileComments.Select(c =>c.Author))
+                    .Include(u => u.ProfileComments.Select(c => c.Author))
                     .Include(u => u.Advertisements)
                     .FirstOrDefault();
 
-
-                if(user==null)
+                if (user == null)
                 {
                     return HttpNotFound();
                 }
@@ -521,7 +523,7 @@ namespace ExamProject.Controllers
         //GET: Account/Edit
         public ActionResult Edit(string id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -530,7 +532,7 @@ namespace ExamProject.Controllers
             {
                 var user = database.Users.FirstOrDefault(u => u.Id == id);
 
-                if (user==null)
+                if (user == null)
                 {
                     return HttpNotFound();
                 }
@@ -557,15 +559,15 @@ namespace ExamProject.Controllers
 
         //POST: Account/Edit
         [HttpPost]
-        public ActionResult Edit(string id,AccountEditModel model)
+        public ActionResult Edit(string id, AccountEditModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (var database = new ApplicationDbContext())
                 {
                     var user = database.Users.FirstOrDefault(u => u.Id == id);
 
-                    if(user == null)
+                    if (user == null)
                     {
                         return HttpNotFound();
                     }
@@ -587,7 +589,7 @@ namespace ExamProject.Controllers
                     user.FullName = model.FullName;
                     user.Gender = model.Gender;
                     user.PhoneNumber = model.PhoneNumber;
-                    if(this.User.IsInRole("Admin"))
+                    if (this.User.IsInRole("Admin"))
                     {
                         this.SetUserRoles(model, user, database);
                     }
@@ -602,27 +604,25 @@ namespace ExamProject.Controllers
             return View(model);
         }
 
-        
-
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         private void SetUserRoles(AccountEditModel model, ApplicationUser user, ApplicationDbContext database)
         {
             var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-            foreach(var role in model.Roles)
+            foreach (var role in model.Roles)
             {
-                if(role.IsSelected)
+                if (role.IsSelected)
                 {
                     userManager.AddToRole(user.Id, role.Name);
                 }
-                else if(!role.IsSelected)
+                else if (!role.IsSelected)
                 {
                     userManager.RemoveFromRole(user.Id, role.Name);
                 }
             }
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         private IList<Role> GetUserRoles(ApplicationUser user, ApplicationDbContext database)
         {
             var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -631,11 +631,11 @@ namespace ExamProject.Controllers
 
             var userRoles = new List<Role>();
 
-            foreach(var roleName in roles)
+            foreach (var roleName in roles)
             {
                 var role = new Role { Name = roleName };
 
-                if(userManager.IsInRole(user.Id,roleName))
+                if (userManager.IsInRole(user.Id, roleName))
                 {
                     role.IsSelected = true;
                 }
@@ -644,7 +644,6 @@ namespace ExamProject.Controllers
             }
 
             return userRoles;
-
         }
 
         private bool IsAuthorizedToEdit(string email)

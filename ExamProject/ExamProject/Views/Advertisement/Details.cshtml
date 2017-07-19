@@ -11,7 +11,7 @@
                 @Model.Title
             </h1>
         </header>
-        
+
         <div>
             @if (Model.ImageUrl != null)
             {
@@ -53,8 +53,6 @@
                 <div>
                     Date Created On: @Model.CreationDate.ToString("MM/dd/yyyy")
                 </div>
-                
-                
 
                 @if (Model.IsSold == false)
                 {
@@ -68,7 +66,6 @@
                         Product status: not available
                     </div>
                 }
-
 
                 <div>
                     Contact Number: @Model.Seller.PhoneNumber
@@ -91,9 +88,6 @@
                     @Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn btn-default btn-xs" })
                 </footer>
             </div>
-
         </div>
-
-        
     </article>
 </div>

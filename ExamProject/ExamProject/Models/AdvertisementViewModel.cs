@@ -1,8 +1,6 @@
 ﻿using ExamProject.Validations;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Web;
 
 namespace ExamProject.Models
@@ -17,7 +15,7 @@ namespace ExamProject.Models
         public string Description { get; set; }
 
         [Required]
-        [Display(Name ="Image Upload")]
+        [Display(Name = "Image Upload")]
         [DataType(DataType.Upload)]
         [Image]
         public HttpPostedFileBase ImageUpload { get; set; }
@@ -29,7 +27,5 @@ namespace ExamProject.Models
         public int CategoryId { get; set; }
 
         public ICollection<Category> Categories { get; set; }
-
-
     }
 }

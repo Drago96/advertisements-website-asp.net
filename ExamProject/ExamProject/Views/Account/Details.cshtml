@@ -37,12 +37,12 @@
             </div>
             if (User.IsInRole("Admin") || @comment.IsAuthor(User.Identity.Name))
             {
-                @Html.ActionLink("Edit", "Edit", "Comment", new { @id = comment.Id }, new { @class = "btn btn-success btn-xs"  }) 
+                @Html.ActionLink("Edit", "Edit", "Comment", new { @id = comment.Id }, new { @class = "btn btn-success btn-xs"  })
                 <span> </span>
                 @Html.ActionLink("Delete", "Delete", "Comment", new { @id = comment.Id }, new { @class = "btn btn-danger btn-xs" })
             }
             <hr />
-            
+
         }
         @if(Model.ProfileComments.Count == 0)
         {
@@ -66,5 +66,3 @@
         }
         </div>
     </div>
-    
-

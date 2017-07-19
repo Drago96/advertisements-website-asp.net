@@ -5,6 +5,7 @@ using Owin;
 using System.Data.Entity;
 
 [assembly: OwinStartupAttribute(typeof(ExamProject.Startup))]
+
 namespace ExamProject
 {
     public partial class Startup

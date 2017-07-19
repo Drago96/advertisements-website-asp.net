@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace ExamProject.Models
 {
@@ -16,7 +12,7 @@ namespace ExamProject.Models
             this.CreationDate = DateTime.Now;
         }
 
-        public Advertisement(string sellerId,string title, string description, double price, int categoryId)
+        public Advertisement(string sellerId, string title, string description, double price, int categoryId)
         {
             this.SellerId = sellerId;
             this.Title = title;
@@ -46,31 +42,31 @@ namespace ExamProject.Models
         public virtual ApplicationUser Seller { get; set; }
 
         [Required]
-        [Display(Name ="Available")]
+        [Display(Name = "Available")]
         public bool IsSold { get; set; }
-       
+
         [DataType(DataType.ImageUrl)]
-        [Display(Name ="Image")]
+        [Display(Name = "Image")]
         public string ImageUrl { get; set; }
 
         [Required]
         public double Price { get; set; }
 
         [ForeignKey("Category")]
-        [Display(Name ="Category Name")]
+        [Display(Name = "Category Name")]
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
 
         public string GetSummary()
         {
-            if(this.Description.Length<100)
+            if (this.Description.Length < 100)
             {
                 return this.Description;
             }
             else
             {
-                return this.Description.Substring(0,100) + "...";
+                return this.Description.Substring(0, 100) + "...";
             }
         }
 
@@ -78,9 +74,5 @@ namespace ExamProject.Models
         {
             return this.Seller.UserName.Equals(name);
         }
-
-       
-
-        
     }
 }

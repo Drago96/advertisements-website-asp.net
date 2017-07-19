@@ -32,6 +32,7 @@ namespace ExamProject.Models
         [Required]
         [Display(Name = "Code")]
         public string Code { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [Display(Name = "Remember this browser?")]
@@ -98,13 +99,8 @@ namespace ExamProject.Models
 
         [Required]
         [Birthday]
-        [Display(Name ="Birth date")]
+        [Display(Name = "Birth date")]
         public string Birthday { get; set; }
-
-
-
-
-
     }
 
     public class ResetPasswordViewModel

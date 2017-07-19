@@ -1,6 +1,4 @@
 ﻿using ExamProject.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -23,7 +21,6 @@ namespace ExamProject.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-     
         //GET: Advertisement/Create
         [Authorize]
         public ActionResult Create()
@@ -34,7 +31,6 @@ namespace ExamProject.Controllers
                 model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
                 return View(model);
             }
-                
         }
 
         //POST: Advertisement/Create
@@ -42,7 +38,7 @@ namespace ExamProject.Controllers
         [HttpPost]
         public ActionResult Create(AdvertisementViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (var database = new ApplicationDbContext())
                 {
@@ -57,14 +53,11 @@ namespace ExamProject.Controllers
 
                     seller.Advertisements.Add(advertisement);
 
-
-
                     database.Entry(seller).State = EntityState.Modified;
                     database.Advertisements.Add(advertisement);
                     database.SaveChanges();
 
                     this.SetImage(advertisement, model.ImageUpload);
-
 
                     database.Entry(advertisement).State = EntityState.Modified;
                     database.SaveChanges();
@@ -92,7 +85,7 @@ namespace ExamProject.Controllers
             {
                 var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Seller).Include(a => a.Category).FirstOrDefault();
 
-                if(advertisement==null)
+                if (advertisement == null)
                 {
                     return HttpNotFound();
                 }
@@ -104,7 +97,7 @@ namespace ExamProject.Controllers
         //GET: Advertisement/Delete
         public ActionResult Delete(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -112,12 +105,12 @@ namespace ExamProject.Controllers
             {
                 var advertisement = database.Advertisements.Where(a => a.Id == id).Include(a => a.Category).FirstOrDefault();
 
-                if(!IsAuthorizedToEdit(advertisement))
+                if (!IsAuthorizedToEdit(advertisement))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
-                if(advertisement == null)
+                if (advertisement == null)
                 {
                     return HttpNotFound();
                 }
@@ -131,7 +124,7 @@ namespace ExamProject.Controllers
         [ActionName("Delete")]
         public ActionResult DeletePost(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -140,7 +133,7 @@ namespace ExamProject.Controllers
             {
                 var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
-                if(advertisement == null)
+                if (advertisement == null)
                 {
                     return HttpNotFound();
                 }
@@ -158,7 +151,7 @@ namespace ExamProject.Controllers
                 }
 
                 var directory = new DirectoryInfo(Server.MapPath("~") + "uploads/" + advertisement.Id);
-                if(directory.Exists)
+                if (directory.Exists)
                 {
                     directory.Delete(true);
                 }
@@ -171,9 +164,9 @@ namespace ExamProject.Controllers
         }
 
         //GET: Advertisement/Edit
-        public ActionResult Edit (int? id)
+        public ActionResult Edit(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -182,7 +175,7 @@ namespace ExamProject.Controllers
             {
                 var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
 
-                if(advertisement == null)
+                if (advertisement == null)
                 {
                     return HttpNotFound();
                 }
@@ -210,7 +203,7 @@ namespace ExamProject.Controllers
         [HttpPost]
         public ActionResult Edit(int? id, AdvertisementEditViewModel model)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -249,19 +242,17 @@ namespace ExamProject.Controllers
             using (var database = new ApplicationDbContext())
             {
                 var advertisement = database.Advertisements.FirstOrDefault(a => a.Id == id);
-                model.Categories= model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
+                model.Categories = model.Categories = database.Categories.OrderBy(c => c.Name).ToList();
                 model.ImageUrl = advertisement.ImageUrl;
                 ViewBag.id = advertisement.Id;
                 return View(model);
             }
-
-
         }
 
         //POST: Mark as sold
         public ActionResult MarkAsSold(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -284,11 +275,8 @@ namespace ExamProject.Controllers
                 database.SaveChanges();
 
                 return RedirectToAction("Details", "Advertisement", new { @id = advertisement.Id });
-
             }
         }
-
-       
 
         private void SetImage(Advertisement advertisement, HttpPostedFileBase imageUpload)
         {
@@ -300,7 +288,7 @@ namespace ExamProject.Controllers
                  "image/png"
              };
 
-            if(advertisement.ImageUrl!=null)
+            if (advertisement.ImageUrl != null)
             {
                 var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
 
@@ -312,16 +300,12 @@ namespace ExamProject.Controllers
 
             if (imageUpload != null && imageUpload.ContentLength != 0 && validImageTypes.Contains(imageUpload.ContentType))
             {
-                DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/")+ advertisement.Id);
+                DirectoryInfo dir = Directory.CreateDirectory(Server.MapPath("~/uploads/") + advertisement.Id);
                 var uploadDir = Server.MapPath("~/uploads/") + advertisement.Id;
                 var imagePath = Path.Combine(uploadDir, imageUpload.FileName);
                 imageUpload.SaveAs(imagePath);
-                advertisement.ImageUrl = "/uploads/"+advertisement.Id + "/"+imageUpload.FileName;
-                
-                
-                
+                advertisement.ImageUrl = "/uploads/" + advertisement.Id + "/" + imageUpload.FileName;
             }
-            
         }
 
         private bool IsAuthorizedToEdit(Advertisement advertisement)

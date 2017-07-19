@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ExamProject.Validations
 {
@@ -19,9 +16,9 @@ namespace ExamProject.Validations
             var parsedDate = new DateTime();
             string input = value as string;
 
-            if(DateTime.TryParse(input,out parsedDate))
+            if (DateTime.TryParse(input, out parsedDate))
             {
-                if((DateTime.Now - parsedDate).Days< 18*365)
+                if ((DateTime.Now - parsedDate).Days < 18 * 365)
                 {
                     return new ValidationResult("Person must be at least 18 years old.");
                 }

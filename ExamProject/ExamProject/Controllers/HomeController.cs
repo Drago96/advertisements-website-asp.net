@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ExamProject.Controllers
@@ -29,7 +28,6 @@ namespace ExamProject.Controllers
                 ViewBag.categories.AddRange(database.Categories.OrderBy(c => c.Name).Select(c => c.Name).ToList());
 
                 return View(advertisements);
-
             }
         }
 
@@ -78,8 +76,6 @@ namespace ExamProject.Controllers
                                .ToList());
                         }
                     }
-
-
                 }
                 ViewBag.searchString = searchString;
                 ViewBag.categoryName = categoryName;
@@ -88,9 +84,5 @@ namespace ExamProject.Controllers
                 return View(advertisements);
             }
         }
-
-
     }
-
-    
 }

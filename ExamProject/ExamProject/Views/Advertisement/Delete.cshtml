@@ -32,7 +32,7 @@
 
             <div class="form-group">
                 @Html.LabelFor(m => m.IsSold, new { @class = "col-sm-4 control-label", @readonly = "readonly" })
-                
+
                 @if (Model.IsSold == true)
                 {
                     <div class="col-sm-4">
@@ -45,7 +45,6 @@
                         Yes
                     </div>
                 }
-
             </div>
 
             <div class="form-group">
@@ -72,8 +71,6 @@
                     }
                 </div>
             </div>
-
-
 
             <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-4">

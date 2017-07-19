@@ -20,8 +20,7 @@
             <tbody>
                 @foreach (var user in Model)
                 {
-                  
-                
+
                     if (ViewBag.Admins.Contains(user.UserName))
                     {
                             @:<tr class="info">
@@ -42,7 +41,6 @@
                             }
                         </td>
                 }
-                
 </tbody>
         </table>
     </div>

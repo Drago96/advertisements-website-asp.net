@@ -4,7 +4,6 @@ namespace ExamProject.Migrations
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -19,15 +18,15 @@ namespace ExamProject.Migrations
 
         protected override void Seed(ExamProject.Models.ApplicationDbContext context)
         {
-            if(!context.Roles.Any())
+            if (!context.Roles.Any())
             {
                 this.CreateRole(context, "Admin");
                 this.CreateRole(context, "User");
             }
 
-            if(!context.Users.Any())
+            if (!context.Users.Any())
             {
-                this.CreateNewUser(context, "admin@gmail.com", "Dragomir Proychev", "asdasd","0000000000","Male","01/01/1990");
+                this.CreateNewUser(context, "admin@gmail.com", "Dragomir Proychev", "asdasd", "0000000000", "Male", "01/01/1990");
                 this.SetRoleToUser(context, "admin@gmail.com", "Admin");
                 this.SetRoleToUser(context, "admin@gmail.com", "User");
             }
@@ -42,7 +41,7 @@ namespace ExamProject.Migrations
 
             var result = userManager.AddToRole(user.Id, role);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new Exception(string.Join(";", result.Errors));
             }
@@ -73,17 +72,16 @@ namespace ExamProject.Migrations
             };
 
             var result = userManager.Create(admin, password);
-
         }
 
-        private void CreateRole(ApplicationDbContext database, string role )
+        private void CreateRole(ApplicationDbContext database, string role)
         {
             var roleManager = new RoleManager<IdentityRole>(
                 new RoleStore<IdentityRole>(database));
 
             var result = roleManager.Create(new IdentityRole(role));
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new Exception(string.Join(";", result.Errors));
             }

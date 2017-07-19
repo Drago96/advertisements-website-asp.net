@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -7,7 +6,7 @@ using System.Web;
 namespace ExamProject.Validations
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class ImageAttribute: ValidationAttribute
+    public class ImageAttribute : ValidationAttribute
     {
         public ImageAttribute()
         {

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace ExamProject.Models
 {
@@ -11,13 +8,11 @@ namespace ExamProject.Models
     {
         public Comment()
         {
-            
             this.CreatedOn = DateTime.Now;
         }
 
         public Comment(string content, string authorId, string targetId)
         {
-            
             this.Content = content;
             this.AuthorId = authorId;
             this.TargetId = targetId;
@@ -37,7 +32,6 @@ namespace ExamProject.Models
         public string AuthorId { get; set; }
 
         public virtual ApplicationUser Author { get; set; }
-        
 
         [ForeignKey("Target")]
         public string TargetId { get; set; }
@@ -48,6 +42,5 @@ namespace ExamProject.Models
         {
             return this.Author.UserName.Equals(name);
         }
-
     }
 }

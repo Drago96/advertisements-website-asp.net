@@ -1,10 +1,7 @@
 ﻿using ExamProject.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ExamProject.Controllers
@@ -18,7 +15,6 @@ namespace ExamProject.Controllers
             return RedirectToAction("List");
         }
 
-       
         //GET: Category/List
         public ActionResult List()
         {
@@ -40,7 +36,7 @@ namespace ExamProject.Controllers
         [HttpPost]
         public ActionResult Create(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (var database = new ApplicationDbContext())
                 {
@@ -57,7 +53,7 @@ namespace ExamProject.Controllers
         //GET: Category/Edit
         public ActionResult Edit(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -66,7 +62,7 @@ namespace ExamProject.Controllers
             {
                 var category = database.Categories.FirstOrDefault(c => c.Id == id);
 
-                if(category == null)
+                if (category == null)
                 {
                     return HttpNotFound();
                 }
@@ -74,12 +70,12 @@ namespace ExamProject.Controllers
                 return View(category);
             }
         }
-        
+
         //POST: Category/Edit
         [HttpPost]
         public ActionResult Edit(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (var database = new ApplicationDbContext())
                 {
@@ -96,7 +92,7 @@ namespace ExamProject.Controllers
         //GET: Category/Delete
         public ActionResult Delete(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -105,14 +101,13 @@ namespace ExamProject.Controllers
             {
                 var category = database.Categories.FirstOrDefault(c => c.Id == id);
 
-                if(category == null)
+                if (category == null)
                 {
                     return HttpNotFound();
                 }
 
                 return View(category);
             }
-                
         }
 
         //POST: Category/Delete
@@ -131,7 +126,7 @@ namespace ExamProject.Controllers
 
                 var categoryAdvertisements = category.Advertisements.ToList();
 
-                foreach(var advertisement in categoryAdvertisements)
+                foreach (var advertisement in categoryAdvertisements)
                 {
                     var fullPath = Server.MapPath("~") + advertisement.ImageUrl.Substring(1);
 
